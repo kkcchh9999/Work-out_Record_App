@@ -12,7 +12,7 @@ class WorkoutRecordActivity : AppCompatActivity() {
         if (isFragmentContainerEmpty) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.fragment_container, WorkoutRecordFragment.newInstance())
+                .add(R.id.fragment_container, WorkoutListFragment.newInstance())
                 .commit()
         }
     }

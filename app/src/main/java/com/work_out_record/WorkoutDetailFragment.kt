@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 
 class WorkoutDetailFragment : Fragment() {
 
@@ -14,6 +15,11 @@ class WorkoutDetailFragment : Fragment() {
     private lateinit var partEditText: EditText
     private lateinit var routineEditText: EditText
     private lateinit var repeatEditText: EditText
+
+    private val recordViewModel: RecordViewModel by lazy {
+        ViewModelProvider(this).get(RecordViewModel::class.java)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

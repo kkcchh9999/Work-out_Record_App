@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@drawable/edittext_background"
+    android:padding="8dp"
+    android:layout_margin="8dp">
+
+    <TextView
+        android:id="@+id/record_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/temp_date2" />
+
+    <TextView
+        android:id="@+id/record_part"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/temp_part"/>
+
+</LinearLayout>
