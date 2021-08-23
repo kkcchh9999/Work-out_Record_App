@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Work_out_Record</string>
+
+    <string name="part_name">ex: 가슴, 등, 하체</string>
+    <string name="temp_date">"2021년 08월 23일,  부위 : "</string>
+
+    <string name="training_name">종목, 중량</string>
+    <string name="repeat">세트별 반복횟수</string>
 </resources>

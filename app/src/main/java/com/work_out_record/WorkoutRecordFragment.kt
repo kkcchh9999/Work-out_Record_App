@@ -22,7 +22,7 @@ class WorkoutRecordFragment: Fragment() {
         recordRecyclerView = view.findViewById(R.id.record_recyclerview)
         recordRecyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return view
     }
 
     companion object {
