@@ -1,6 +1,8 @@
 package com.work_out_record
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,18 +10,31 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import java.util.*
+import androidx.lifecycle.Observer
+
+private const val RECORD_ID = "record_id"
 
 class WorkoutDetailFragment : Fragment() {
+
+    private lateinit var record: Record
 
     private lateinit var dateTextView: TextView
     private lateinit var partEditText: EditText
     private lateinit var routineEditText: EditText
     private lateinit var repeatEditText: EditText
 
-    private val recordViewModel: RecordViewModel by lazy {
-        ViewModelProvider(this).get(RecordViewModel::class.java)
+    private val recordDetailViewModel: RecordDetailViewModel by lazy {
+        ViewModelProvider(this).get(RecordDetailViewModel::class.java)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        record = Record()
+        val recordId: UUID = arguments?.getSerializable(RECORD_ID) as UUID
+        recordDetailViewModel.loadRecord(recordId)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +51,87 @@ class WorkoutDetailFragment : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        recordDetailViewModel.recordLiveData.observe(
+            viewLifecycleOwner,
+            Observer { record ->
+                record?.let {
+                    this.record = record
+                    updateUI()
+                }
+            }
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        val partWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                record.part = s.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                TODO("Not yet implemented")
+            }
+        }
+        partEditText.addTextChangedListener(partWatcher)
+
+        val routineWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                record.routine = s.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                TODO("Not yet implemented")
+            }
+        }
+        routineEditText.addTextChangedListener(routineWatcher)
+
+        val repeatWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                record.repeat = s.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                TODO("Not yet implemented")
+            }
+        }
+        repeatEditText.addTextChangedListener(repeatWatcher)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        recordDetailViewModel.saveRecord(record)
+    }
+
+    private fun updateUI() {
+        partEditText.setText(record.part)
+        repeatEditText.setText(record.repeat)
+        routineEditText.setText(record.routine)
+    }
+
     companion object {
-        fun newInstance() = WorkoutDetailFragment()
+        fun newInstance(recordId: UUID): WorkoutDetailFragment {
+            val args = Bundle().apply {
+                putSerializable(RECORD_ID, recordId)
+            }
+            return WorkoutDetailFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

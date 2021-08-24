@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.work_out_record.database.RecordDatabase
 import java.util.*
+import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "RecordDatabase"
 
@@ -18,10 +19,29 @@ class RecordRepository private constructor(context: Context){
     ).build()
 
     private val recordDAO = database.recordDAO()
+    private val executor = Executors.newSingleThreadExecutor()
 
     fun getRecords(): LiveData<List<Record>> = recordDAO.getRecords()
 
     fun getRecord(id: UUID): LiveData<Record?> = recordDAO.getRecord(id)!!
+
+    fun updateRecord(record: Record) {
+        executor.execute {
+            recordDAO.updateRecord(record)
+        }
+    }
+
+    fun addRecord(record: Record) {
+        executor.execute {
+            recordDAO.addRecord(record)
+        }
+    }
+
+    fun deleteRecord(record: Record) {
+        executor.execute {
+            recordDAO.deleteRecord(record)
+        }
+    }
 
     companion object {
         private var INSTANCE: RecordRepository? = null

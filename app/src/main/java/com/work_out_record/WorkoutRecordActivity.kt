@@ -19,7 +19,7 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
     }
 
     override fun onRecordSelected(recordId: UUID) {
-        val fragment = WorkoutDetailFragment()
+        val fragment = WorkoutDetailFragment.newInstance(recordId)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
