@@ -3,13 +3,13 @@
     package="com.work_out_record">
 
     <application
+        android:name=".WorkoutRecordApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Work_out_Record">
-        <activity android:name=".WorkoutDetailFragment"></activity>
         <activity android:name=".WorkoutRecordActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
