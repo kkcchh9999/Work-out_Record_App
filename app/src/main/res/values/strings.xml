@@ -8,4 +8,5 @@
 
     <string name="training_name">종목, 중량</string>
     <string name="repeat">세트별 반복횟수</string>
+    <string name="add_record">기록 추가</string>
 </resources>

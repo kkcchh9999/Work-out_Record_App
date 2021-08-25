@@ -3,9 +3,7 @@ package com.work_out_record
 import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,6 +33,11 @@ class WorkoutListFragment: Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -69,6 +72,23 @@ class WorkoutListFragment: Fragment() {
         callbacks = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_workout_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.add_record -> {
+                val record = Record()
+                recordViewModel.addRecord(record)
+                callbacks?.onRecordSelected(record.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun updateUI(records: List<Record>) {
         adapter = RecordAdapter(records)
         recordRecyclerView.adapter = adapter
@@ -81,9 +101,12 @@ class WorkoutListFragment: Fragment() {
         private val dateTextView: TextView = itemView.findViewById(R.id.record_date)
         private val partTextView: TextView = itemView.findViewById(R.id.record_part)
 
+        init {
+            itemView.setOnClickListener(this)
+        }
         fun bind(record: Record) {
             this.record = record
-            dateTextView.text = DateFormat.format("yyyy.EEEE.MMM.dd", record.date)
+            dateTextView.text = DateFormat.format("yyyy/MM/dd HH:MM", record.date)
             partTextView.text = record.part
         }
 

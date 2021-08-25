@@ -2,10 +2,11 @@ package com.work_out_record
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
-data class Record (
+data class Record(
     @PrimaryKey val id: UUID = UUID.randomUUID(),
     var date: Date = Date(),
     var part: String = "",

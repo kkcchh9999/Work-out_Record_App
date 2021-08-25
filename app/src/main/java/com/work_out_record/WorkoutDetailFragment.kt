@@ -3,6 +3,7 @@ package com.work_out_record
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,8 @@ class WorkoutDetailFragment : Fragment() {
         routineEditText = view.findViewById(R.id.routine_editText) as EditText
         repeatEditText = view.findViewById(R.id.repeat_editText) as EditText
 
+        dateTextView.text = DateFormat.format("yyyy/MM/dd HH:MM", record.date)
+
         return view
     }
 
@@ -69,7 +72,7 @@ class WorkoutDetailFragment : Fragment() {
 
         val partWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -77,14 +80,14 @@ class WorkoutDetailFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                TODO("Not yet implemented")
+
             }
         }
         partEditText.addTextChangedListener(partWatcher)
 
         val routineWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -92,14 +95,14 @@ class WorkoutDetailFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                TODO("Not yet implemented")
+
             }
         }
         routineEditText.addTextChangedListener(routineWatcher)
 
         val repeatWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -107,7 +110,7 @@ class WorkoutDetailFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                TODO("Not yet implemented")
+
             }
         }
         repeatEditText.addTextChangedListener(repeatWatcher)
