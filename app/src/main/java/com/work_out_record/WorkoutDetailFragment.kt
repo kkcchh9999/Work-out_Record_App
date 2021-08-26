@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.text.method.KeyListener
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.SearchView
@@ -27,6 +28,7 @@ class WorkoutDetailFragment : Fragment() {
     private lateinit var partEditText: EditText
     private lateinit var routineEditText: EditText
     private lateinit var repeatEditText: EditText
+    private lateinit var routineName: Array<String>
 
     private val recordDetailViewModel: RecordDetailViewModel by lazy {
         ViewModelProvider(this).get(RecordDetailViewModel::class.java)
@@ -54,6 +56,8 @@ class WorkoutDetailFragment : Fragment() {
         routineEditText = view.findViewById(R.id.routine_editText) as EditText
         repeatEditText = view.findViewById(R.id.repeat_editText) as EditText
 
+        routineName = recordDetailViewModel.routine
+
         return view
     }
 
@@ -75,7 +79,6 @@ class WorkoutDetailFragment : Fragment() {
 
         val partWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -83,14 +86,12 @@ class WorkoutDetailFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-
             }
         }
         partEditText.addTextChangedListener(partWatcher)
 
         val routineWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -98,14 +99,12 @@ class WorkoutDetailFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-
             }
         }
         routineEditText.addTextChangedListener(routineWatcher)
 
         val repeatWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -113,7 +112,6 @@ class WorkoutDetailFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-
             }
         }
         repeatEditText.addTextChangedListener(repeatWatcher)
@@ -144,8 +142,57 @@ class WorkoutDetailFragment : Fragment() {
                     .setNegativeButton(R.string.no_button,
                         DialogInterface.OnClickListener { dialog, which ->
                             //유저가 취소함
+                    }).show()
+                return true
+            }
+            R.id.save_routine -> {
+                var selectedItems: Int = -1
+                val selectDialogBuilder = AlertDialog.Builder(this.context)
+
+                selectDialogBuilder.setTitle(R.string.select_routine_save)
+                    .setSingleChoiceItems(recordDetailViewModel.routine, -1,
+                        DialogInterface.OnClickListener { _, which ->
+                            selectedItems = which
+                        })
+                    .setPositiveButton(R.string.save_here,
+                    DialogInterface.OnClickListener { _, _ ->
+                        recordDetailViewModel.saveRoutine(
+                            routineName[selectedItems],
+                            record.routine
+                        )
                     })
-                alertDialogBuilder.show()
+                    .setNegativeButton(R.string.cancel,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        //유저가 취소함
+                    })
+                    .setNeutralButton(R.string.change_routine_name,
+                        DialogInterface.OnClickListener { dialog, which ->
+
+                        })
+                    .show()
+
+                return true
+            }
+            R.id.load_routine -> {
+                var selectedItem: Int = -1
+                val selectDialogBuilder = AlertDialog.Builder(this.context)
+
+                selectDialogBuilder.setTitle(R.string.select_routine_load)
+                    .setSingleChoiceItems(recordDetailViewModel.routine, -1,
+                        DialogInterface.OnClickListener { _, which ->
+                            selectedItem = which
+                        })
+                    .setPositiveButton(R.string.load_here,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            routineEditText.setText(
+                                recordDetailViewModel.loadRoutine(routineName[selectedItem])
+                            )
+                        })
+                    .setNegativeButton(R.string.cancel,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            //유저가 취소함
+                        })
+                    .show()
                 return true
             }
 

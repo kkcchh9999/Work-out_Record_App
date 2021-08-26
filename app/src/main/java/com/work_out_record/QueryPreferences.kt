@@ -5,15 +5,15 @@ import android.preference.PreferenceManager
 
 object QueryPreferences {
 
-    fun getStoredQuery(context: Context, routineName: String): String {
+    fun getStoredQuery(context: Context, key: String): String {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(routineName, "")!!
+        return prefs.getString(key, "")!!
     }
 
-    fun setStoredQuery(context: Context, routineName: String, query: String) {
+    fun setStoredQuery(context: Context, key: String, query: String) {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
-            .putString(routineName, query)
+            .putString(key, query)
             .apply()
     }
 }
