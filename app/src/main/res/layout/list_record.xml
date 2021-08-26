@@ -15,13 +15,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        tools:text="2021-08-25 수 10:20 " />
+        tools:text="2021-08-25 수 10:20 "
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/record_part"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        tools:text="가슴, 삼두"/>
+        tools:text="가슴, 삼두"
+        android:textColor="@color/black" />
 
 </LinearLayout>

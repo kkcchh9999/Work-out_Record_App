@@ -26,4 +26,13 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .addToBackStack(null)
             .commit()
     }
+
+    override fun onDeleteSelected() {
+        val fragment = WorkoutListDeleteFragment.newInstance()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 }

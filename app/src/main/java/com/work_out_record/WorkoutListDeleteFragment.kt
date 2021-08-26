@@ -1,12 +1,13 @@
 package com.work_out_record
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.CheckBox
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,31 +16,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
-class WorkoutListFragment: Fragment() {
-
-    /**
-     *호스팅 액티비티에서 구현할 인터페이스 Callbacks
-     * 이를 구현하여 프래그먼트간 화면전환
-     */
-    interface Callbacks {
-        fun onRecordSelected(recordId: UUID)
-        fun onDeleteSelected()
-    }
-    private var callbacks: Callbacks? = null
+class WorkoutListDeleteFragment: Fragment() {
 
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
-
-    private lateinit var noRecordTextView: TextView
-    private lateinit var noRecordButton: ImageButton
+    private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
 
     private val recordViewModel: RecordViewModel by lazy {
         ViewModelProvider(this).get(RecordViewModel::class.java)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +41,6 @@ class WorkoutListFragment: Fragment() {
         recordRecyclerView = view.findViewById(R.id.record_recyclerview)
         recordRecyclerView.layoutManager = GridLayoutManager(context, 2)
         recordRecyclerView.adapter = adapter
-        noRecordTextView = view.findViewById(R.id.no_record_text)
-        noRecordButton = view.findViewById(R.id.no_record_button)
 
         return view
     }
@@ -75,28 +57,30 @@ class WorkoutListFragment: Fragment() {
         )
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = null
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_workout_list, menu)
+        inflater.inflate(R.menu.fragment_delete_list, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.add_record -> {
-                val record = Record()
-                record.date = Date(System.currentTimeMillis())
-                recordViewModel.addRecord(record)
-                callbacks?.onRecordSelected(record.id)
-                true
-            }
-            R.id.delete_records -> {
-                callbacks?.onDeleteSelected()
-                true
+            R.id.delete_really -> {
+                val alertDialogBuilder = AlertDialog.Builder(this.context)
+                alertDialogBuilder.setTitle(R.string.delete_record)
+                    .setMessage(R.string.delete_record_really)
+                    .setPositiveButton(R.string.yes_button,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        deleteID.forEach {
+                            recordViewModel.deleteRecord(it)
+                            fragmentManager?.popBackStack()
+                        }
+                    })
+                    .setNegativeButton(R.string.no_button,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        //유저가 취소함
+                    })
+                alertDialogBuilder.show()
+                return true
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -105,46 +89,35 @@ class WorkoutListFragment: Fragment() {
     private fun updateUI(records: List<Record>) {
         adapter = RecordAdapter(records)
         recordRecyclerView.adapter = adapter
-        if (records.isEmpty()) {
-            noRecordTextView.visibility = View.VISIBLE
-            noRecordButton.visibility = View.VISIBLE
-            noRecordButton.setOnClickListener {
-                val record = Record()
-                record.date = Date(System.currentTimeMillis())
-                recordViewModel.addRecord(record)
-                callbacks?.onRecordSelected(record.id)
-            }
-        } else {
-            noRecordTextView.visibility = View.INVISIBLE
-            noRecordButton.visibility = View.INVISIBLE
-        }
     }
 
-    private inner class RecordHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class RecordHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private lateinit var record: Record
 
         private val dateTextView: TextView = itemView.findViewById(R.id.record_date)
         private val partTextView: TextView = itemView.findViewById(R.id.record_part)
+        private val deleteCheckBox: CheckBox = itemView.findViewById(R.id.delete_checkBox)
 
-        init {
-            itemView.setOnClickListener(this)
-        }
         fun bind(record: Record) {
             this.record = record
             dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
+            deleteCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    deleteID.add(record)
+                } else {
+                    deleteID.remove(record)
+                }
+            }
         }
 
-        override fun onClick(v: View?) {
-            callbacks?.onRecordSelected(record.id)
-        }
     }
 
     private inner class RecordAdapter(var records: List<Record>) : RecyclerView.Adapter<RecordHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
-            val view = layoutInflater.inflate(R.layout.list_record, parent, false)
+            val view = layoutInflater.inflate(R.layout.list_record_delete, parent, false)
             return RecordHolder(view)
         }
 
@@ -159,6 +132,6 @@ class WorkoutListFragment: Fragment() {
     }
 
     companion object {
-        fun newInstance() = WorkoutListFragment()
+        fun newInstance() = WorkoutListDeleteFragment()
     }
 }

@@ -139,9 +139,8 @@ class WorkoutDetailFragment : Fragment() {
                     })
                     .setNegativeButton(R.string.no_button,
                         DialogInterface.OnClickListener { dialog, which ->
-                            //취소
+                            //유저가 취소함
                     })
-                alertDialogBuilder.create()
                 alertDialogBuilder.show()
                 return true
             }

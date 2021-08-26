@@ -18,6 +18,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="15sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         tools:text="2021-08-25 10:20"/>
 
     <TextView
@@ -26,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/workout_part"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_textView" />
 
@@ -39,6 +42,7 @@
         android:paddingStart="5sp"
         android:paddingEnd="5sp"
         android:textSize="15sp"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/workout_part"
