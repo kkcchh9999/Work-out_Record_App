@@ -3,7 +3,9 @@ package com.work_out_record
 import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.*
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -81,8 +83,13 @@ class WorkoutListFragment: Fragment() {
         return when (item.itemId) {
             R.id.add_record -> {
                 val record = Record()
+                record.date = Date(System.currentTimeMillis())
                 recordViewModel.addRecord(record)
                 callbacks?.onRecordSelected(record.id)
+                true
+            }
+            R.id.delete_records -> {
+
                 true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -106,7 +113,7 @@ class WorkoutListFragment: Fragment() {
         }
         fun bind(record: Record) {
             this.record = record
-            dateTextView.text = DateFormat.format("yyyy/MM/dd HH:MM", record.date)
+            dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
         }
 

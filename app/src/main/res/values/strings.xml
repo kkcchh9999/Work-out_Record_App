@@ -2,11 +2,12 @@
     <string name="app_name">Work_out_Record</string>
 
     <string name="part_name">ex: 가슴, 등, 하체</string>
-    <string name="temp_date">2021년 08월 23일,  부위 : </string>
-    <string name="temp_date2">2021년 08월 23일</string>
-    <string name="temp_part">가슴, 이두</string>
-
     <string name="training_name">종목, 중량</string>
     <string name="repeat">세트별 반복횟수</string>
     <string name="add_record">기록 추가</string>
+    <string name="delete_record">기록 삭제</string>
+    <string name="workout_part">운동 부위 : </string>
+    <string name="delete_record_really">기록을 정말 삭제하시겠습니까?</string>
+    <string name="yes_button">네</string>
+    <string name="no_button">아니오</string>
 </resources>

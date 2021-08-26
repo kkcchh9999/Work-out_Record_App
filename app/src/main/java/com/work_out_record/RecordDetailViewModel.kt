@@ -23,4 +23,8 @@ class RecordDetailViewModel() : ViewModel() {
     fun saveRecord(record: Record) {
         recordRepository.updateRecord(record)
     }
+
+    fun deleteRecord(record: Record) {
+        recordRepository.deleteRecord(record)
+    }
 }

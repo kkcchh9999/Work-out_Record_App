@@ -18,24 +18,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="15sp"
-        android:text="@string/temp_date" />
+        tools:text="2021-08-25 10:20"/>
+
+    <TextView
+        android:id="@+id/workout_part"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/workout_part"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_textView" />
 
     <EditText
         android:id="@+id/part_editText"
-        android:background="@drawable/edittext_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_background"
         android:hint="@string/part_name"
         android:maxLines="1"
-        android:textSize="15sp"
         android:paddingStart="5sp"
         android:paddingEnd="5sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/date_textView"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/workout_part"
+        app:layout_constraintTop_toBottomOf="@+id/date_textView" />
 
     <EditText
         android:id="@+id/routine_editText"
@@ -47,16 +54,16 @@
         android:autofillHints="no"
         android:background="@drawable/edittext_background"
         android:gravity="top"
+        android:hint="@string/training_name"
         android:overScrollMode="always"
         android:paddingStart="5sp"
         android:scrollbarStyle="insideInset"
         android:scrollbars="horizontal"
-        android:hint="@string/training_name"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/repeat_editText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/workout_part" />
 
     <EditText
         android:id="@+id/repeat_editText"
@@ -69,15 +76,16 @@
         android:autofillHints="no"
         android:background="@drawable/edittext_background"
         android:gravity="top"
+        android:hint="@string/repeat"
         android:overScrollMode="always"
         android:paddingStart="5sp"
         android:scrollbarStyle="insideInset"
         android:scrollbars="horizontal"
-        android:hint="@string/repeat"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/routine_editText"
-        app:layout_constraintTop_toBottomOf="@+id/date_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/part_editText" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

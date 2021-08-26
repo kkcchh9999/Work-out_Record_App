@@ -6,4 +6,10 @@
         android:title="@string/add_record"
         android:icon="@drawable/ic_add_record"
         app:showAsAction="always"/>
+
+    <item android:id="@+id/delete_records"
+        android:title="@string/delete_record"
+        android:icon="@drawable/ic_delete_record"
+        app:showAsAction="always"/>
+
 </menu>

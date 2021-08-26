@@ -1,12 +1,12 @@
 package com.work_out_record
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -32,6 +32,8 @@ class WorkoutDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         record = Record()
         val recordId: UUID = arguments?.getSerializable(RECORD_ID) as UUID
         recordDetailViewModel.loadRecord(recordId)
@@ -48,8 +50,6 @@ class WorkoutDetailFragment : Fragment() {
         partEditText = view.findViewById(R.id.part_editText) as EditText
         routineEditText = view.findViewById(R.id.routine_editText) as EditText
         repeatEditText = view.findViewById(R.id.repeat_editText) as EditText
-
-        dateTextView.text = DateFormat.format("yyyy/MM/dd HH:MM", record.date)
 
         return view
     }
@@ -121,10 +121,40 @@ class WorkoutDetailFragment : Fragment() {
         recordDetailViewModel.saveRecord(record)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_workout_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_record -> {
+                val alertDialogBuilder = AlertDialog.Builder(this.context)
+                alertDialogBuilder.setTitle(R.string.delete_record)
+                    .setMessage(R.string.delete_record_really)
+                    .setPositiveButton(R.string.yes_button,
+                        DialogInterface.OnClickListener { _, _ ->
+                            recordDetailViewModel.deleteRecord(record)
+                            fragmentManager?.popBackStack()
+                    })
+                    .setNegativeButton(R.string.no_button,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            //취소
+                    })
+                alertDialogBuilder.create()
+                alertDialogBuilder.show()
+                return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun updateUI() {
         partEditText.setText(record.part)
         repeatEditText.setText(record.repeat)
         routineEditText.setText(record.routine)
+        dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
     }
 
     companion object {
