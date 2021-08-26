@@ -1,12 +1,10 @@
 package com.work_out_record
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import java.util.*
 
-class RecordDetailViewModel() : ViewModel() {
+class RecordDetailViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val recordRepository = RecordRepository.get()
     private val recordIdLiveData = MutableLiveData<UUID>()

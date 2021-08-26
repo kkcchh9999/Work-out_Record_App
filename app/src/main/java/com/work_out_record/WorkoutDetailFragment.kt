@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
+import android.text.method.KeyListener
 import android.view.*
 import android.widget.EditText
+import android.widget.SearchView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import java.util.*
@@ -124,6 +127,7 @@ class WorkoutDetailFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_workout_detail, menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -167,3 +171,4 @@ class WorkoutDetailFragment : Fragment() {
         }
     }
 }
+

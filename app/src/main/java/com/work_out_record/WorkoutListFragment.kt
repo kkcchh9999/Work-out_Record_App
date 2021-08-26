@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,7 @@ class WorkoutListFragment: Fragment() {
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
 
+    private lateinit var noRecordSearchTextView: TextView
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
 
@@ -59,6 +61,7 @@ class WorkoutListFragment: Fragment() {
         recordRecyclerView.adapter = adapter
         noRecordTextView = view.findViewById(R.id.no_record_text)
         noRecordButton = view.findViewById(R.id.no_record_button)
+        noRecordSearchTextView = view.findViewById(R.id.no_record_search)
 
         return view
     }
@@ -69,7 +72,7 @@ class WorkoutListFragment: Fragment() {
             viewLifecycleOwner,
             Observer { records ->
                 records?.let {
-                    updateUI(records)
+                    updateUI(records, 0)
                 }
             }
         )
@@ -83,6 +86,51 @@ class WorkoutListFragment: Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_workout_list, menu)
+
+        val searchRecord: MenuItem = menu.findItem(R.id.search_record)
+        val searchView = searchRecord.actionView as SearchView
+
+        searchView.apply {
+            setOnCloseListener {
+                recordViewModel.rollbackRecord()
+                recordViewModel.recordLiveData.observe(
+                    viewLifecycleOwner,
+                    Observer { records ->
+                        records?.let {
+                            updateUI(records, 0)
+                        }
+                    }
+                )
+                false
+            }
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    recordViewModel.searchRecord(query!!)
+                    recordViewModel.recordLiveData.observe(
+                        viewLifecycleOwner,
+                        Observer { records ->
+                            records?.let {
+                                updateUI(records, 1)
+                            }
+                        }
+                    )
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    recordViewModel.searchRecord(newText!!)
+                    recordViewModel.recordLiveData.observe(
+                        viewLifecycleOwner,
+                        Observer { records ->
+                            records?.let {
+                                updateUI(records, 1)
+                            }
+                        }
+                    )
+                    return true
+                }
+            })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -102,10 +150,10 @@ class WorkoutListFragment: Fragment() {
         }
     }
 
-    private fun updateUI(records: List<Record>) {
+    private fun updateUI(records: List<Record>, mod: Int) {
         adapter = RecordAdapter(records)
         recordRecyclerView.adapter = adapter
-        if (records.isEmpty()) {
+        if (records.isEmpty() && mod == 0) {
             noRecordTextView.visibility = View.VISIBLE
             noRecordButton.visibility = View.VISIBLE
             noRecordButton.setOnClickListener {
@@ -114,9 +162,13 @@ class WorkoutListFragment: Fragment() {
                 recordViewModel.addRecord(record)
                 callbacks?.onRecordSelected(record.id)
             }
-        } else {
+        } else if (records.isNotEmpty() && mod == 0) {
             noRecordTextView.visibility = View.INVISIBLE
             noRecordButton.visibility = View.INVISIBLE
+        } else if (records.isEmpty() && mod == 1) {
+            noRecordSearchTextView.visibility = View.VISIBLE
+        } else {
+            noRecordSearchTextView.visibility = View.INVISIBLE
         }
     }
 
@@ -126,6 +178,7 @@ class WorkoutListFragment: Fragment() {
 
         private val dateTextView: TextView = itemView.findViewById(R.id.record_date)
         private val partTextView: TextView = itemView.findViewById(R.id.record_part)
+        private val routineTextView: TextView = itemView.findViewById(R.id.record_routine)
 
         init {
             itemView.setOnClickListener(this)
@@ -134,6 +187,7 @@ class WorkoutListFragment: Fragment() {
             this.record = record
             dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
+            routineTextView.text = record.routine
         }
 
         override fun onClick(v: View?) {

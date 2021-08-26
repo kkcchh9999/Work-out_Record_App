@@ -25,6 +25,8 @@ class RecordRepository private constructor(context: Context){
 
     fun getRecord(id: UUID): LiveData<Record?> = recordDAO.getRecord(id)!!
 
+    fun searchRecord(part: String): LiveData<List<Record>> = recordDAO.searchRecord("%$part%")
+
     fun updateRecord(record: Record) {
         executor.execute {
             recordDAO.updateRecord(record)

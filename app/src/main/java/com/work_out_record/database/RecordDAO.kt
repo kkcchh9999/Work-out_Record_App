@@ -8,11 +8,14 @@ import java.util.*
 @Dao
 interface RecordDAO {
 
-    @Query("SELECT * FROM record")
+    @Query("SELECT * FROM record ORDER BY date DESC")
     fun getRecords(): LiveData<List<Record>>
 
     @Query ("SELECT * FROM record WHERE id=(:id)")
     fun getRecord(id: UUID): LiveData<Record?>
+
+    @Query ("SELECT * FROM record WHERE part LIKE :part")
+    fun searchRecord(part: String): LiveData<List<Record>>
 
     @Update
     fun updateRecord(record: Record)

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:background="@drawable/edittext_background"
     android:padding="8dp"
     android:layout_marginStart="4dp"
@@ -26,5 +26,13 @@
         android:maxLines="1"
         tools:text="가슴, 삼두"
         android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/record_routine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="벤치프레스 100kg 48\n푸쉬 업 50개"
+        android:textColor="@color/gray"
+        android:textSize="12sp"/>
 
 </LinearLayout>

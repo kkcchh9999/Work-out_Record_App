@@ -66,7 +66,7 @@ class WorkoutListDeleteFragment: Fragment() {
         return when (item.itemId) {
             R.id.delete_really -> {
                 val alertDialogBuilder = AlertDialog.Builder(this.context)
-                alertDialogBuilder.setTitle(R.string.delete_record)
+                alertDialogBuilder.setTitle(R.string.delete_records)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                     DialogInterface.OnClickListener { dialog, which ->
@@ -97,12 +97,15 @@ class WorkoutListDeleteFragment: Fragment() {
 
         private val dateTextView: TextView = itemView.findViewById(R.id.record_date)
         private val partTextView: TextView = itemView.findViewById(R.id.record_part)
+        private val routineTextView: TextView = itemView.findViewById(R.id.record_routine)
         private val deleteCheckBox: CheckBox = itemView.findViewById(R.id.delete_checkBox)
+
 
         fun bind(record: Record) {
             this.record = record
             dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
+            routineTextView.text = record.routine
             deleteCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     deleteID.add(record)

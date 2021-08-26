@@ -7,4 +7,12 @@
         android:title="@string/delete_record"
         app:showAsAction="always" />
 
+    <item android:id="@+id/save_routine"
+        android:title="@string/save_routine"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/load_routine"
+        android:title="@string/load_routine"
+        app:showAsAction="never"/>
+
 </menu>
