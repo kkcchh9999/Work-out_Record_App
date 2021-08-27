@@ -9,19 +9,31 @@ class RecordDetailViewModel(private val app: Application) : AndroidViewModel(app
     private val recordRepository = RecordRepository.get()
     private val recordIdLiveData = MutableLiveData<UUID>()
 
-    var routine: Array<String> = arrayOf("루틴1", "루틴2", "루틴3", "루틴4", "루틴5")
-
     var recordLiveData: LiveData<Record?> =
         Transformations.switchMap(recordIdLiveData) { recordId ->
             recordRepository.getRecord(recordId)
         }
 
-    fun saveRoutine(routineName: String, routine: String) {
-        QueryPreferences.setStoredQuery(app, routineName, routine)
+    var savedRoutineName: Array<String> = arrayOf("루틴 1", "루틴 2", "루틴 3", "루틴 4", "루틴 5")
+    init {
+        for (i in 0..4) {
+            if (QueryPreferences.getStoredQuery(app, i.toString()) != "") {
+                savedRoutineName[i] = QueryPreferences.getStoredQuery(app, i.toString())
+            }
+        }
     }
 
-    fun loadRoutine(routineName: String): String{
-        return QueryPreferences.getStoredQuery(app, routineName)
+    fun saveRoutineName(saveLocation: Int, routineName: String) {
+        QueryPreferences.setStoredQuery(app, saveLocation.toString(), routineName)
+        savedRoutineName[saveLocation] = QueryPreferences.getStoredQuery(app, saveLocation.toString())
+    }
+
+    fun saveRoutine(routineCode: String, routine: String) {
+        QueryPreferences.setStoredQuery(app, routineCode, routine)
+    }
+
+    fun loadRoutine(routineCode: String): String{
+        return QueryPreferences.getStoredQuery(app, routineCode)
     }
 
     fun loadRecord(recordId: UUID) {

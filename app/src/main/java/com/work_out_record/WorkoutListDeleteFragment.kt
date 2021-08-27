@@ -21,7 +21,7 @@ class WorkoutListDeleteFragment: Fragment() {
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
     private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
-
+    private lateinit var deleteAll: List<Record>
     private val recordViewModel: RecordViewModel by lazy {
         ViewModelProvider(this).get(RecordViewModel::class.java)
     }
@@ -50,6 +50,7 @@ class WorkoutListDeleteFragment: Fragment() {
         recordViewModel.recordLiveData.observe(
             viewLifecycleOwner,
             Observer { records ->
+                deleteAll = records
                 records?.let {
                     updateUI(records)
                 }
@@ -82,6 +83,26 @@ class WorkoutListDeleteFragment: Fragment() {
                 alertDialogBuilder.show()
                 return true
             }
+
+            R.id.delete_all -> {
+                val alertDialogBuilder = AlertDialog.Builder(this.context)
+                alertDialogBuilder.setTitle(R.string.delete_all)
+                    .setMessage(R.string.delete_record_really)
+                    .setPositiveButton(R.string.yes_button,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            deleteAll.forEach {
+                                recordViewModel.deleteRecord(it)
+                                fragmentManager?.popBackStack()
+                            }
+                        })
+                    .setNegativeButton(R.string.no_button,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            //유저가 취소함
+                        })
+                alertDialogBuilder.show()
+                return true
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
     }
