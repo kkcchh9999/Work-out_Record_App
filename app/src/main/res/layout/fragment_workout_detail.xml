@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="15sp"
         android:textColor="@color/black"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         tools:text="2021-08-25 10:20"/>
 
     <TextView
@@ -27,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:text="@string/workout_part"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,8 +40,9 @@
         android:background="@drawable/edittext_background"
         android:hint="@string/part_name"
         android:maxLines="1"
-        android:paddingStart="5sp"
-        android:paddingEnd="5sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:padding="5dp"
         android:textSize="15sp"
         android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,8 +54,8 @@
         android:id="@+id/routine_editText"
         android:layout_width="210dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:autofillHints="no"
         android:background="@drawable/edittext_background"
@@ -68,7 +70,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/repeat_editText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workout_part" />
+        app:layout_constraintTop_toBottomOf="@+id/part_editText" />
 
     <EditText
         android:id="@+id/repeat_editText"
