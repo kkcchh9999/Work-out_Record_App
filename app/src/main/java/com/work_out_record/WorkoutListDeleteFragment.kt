@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,11 +21,14 @@ class WorkoutListDeleteFragment: Fragment() {
 
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
-    private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
-    private lateinit var deleteAll: List<Record>
     private val recordViewModel: RecordViewModel by lazy {
         ViewModelProvider(this).get(RecordViewModel::class.java)
     }
+
+    private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
+    private lateinit var deleteAll: List<Record>
+
+    private var position = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,9 +75,14 @@ class WorkoutListDeleteFragment: Fragment() {
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                     DialogInterface.OnClickListener { dialog, which ->
-                        deleteID.forEach {
-                            recordViewModel.deleteRecord(it)
-                            fragmentManager?.popBackStack()
+                        if (deleteID.isEmpty()) {
+                            Toast.makeText(this.context, R.string.select_item_first, Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+                            deleteID.forEach {
+                                recordViewModel.deleteRecord(it)
+                                fragmentManager?.popBackStack()
+                            }
                         }
                     })
                     .setNegativeButton(R.string.no_button,
@@ -121,15 +130,20 @@ class WorkoutListDeleteFragment: Fragment() {
         private val routineTextView: TextView = itemView.findViewById(R.id.record_routine)
         private val deleteCheckBox: CheckBox = itemView.findViewById(R.id.delete_checkBox)
 
-
         fun bind(record: Record) {
             this.record = record
             dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
             routineTextView.text = record.routine
+            deleteCheckBox.isChecked = deleteID.contains(record)
+        }
+
+        fun select(record: Record) {
+            this.record = record
             deleteCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     deleteID.add(record)
+                    deleteID = deleteID.distinct().toMutableList()
                 } else {
                     deleteID.remove(record)
                 }
@@ -147,6 +161,7 @@ class WorkoutListDeleteFragment: Fragment() {
 
         override fun onBindViewHolder(holder: RecordHolder, position: Int) {
             val record = records[position]
+            holder.select(record)
             holder.bind(record)
         }
 

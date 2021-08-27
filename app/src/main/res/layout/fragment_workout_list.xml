@@ -47,7 +47,7 @@
         android:id="@+id/no_record_button"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:backgroundTint="@color/pink"
+        android:backgroundTint="@color/green"
         android:src="@drawable/ic_add_record"
         android:scaleType="centerCrop"
         android:layout_marginTop="16dp"
