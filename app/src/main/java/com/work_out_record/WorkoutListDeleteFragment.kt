@@ -19,8 +19,8 @@ class WorkoutListDeleteFragment: Fragment() {
 
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
-    private val recordViewModel: RecordViewModel by lazy {
-        ViewModelProvider(this).get(RecordViewModel::class.java)
+    private val recordViewModel: RecordsViewModel by lazy {
+        ViewModelProvider(this).get(RecordsViewModel::class.java)
     }
 
     private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()

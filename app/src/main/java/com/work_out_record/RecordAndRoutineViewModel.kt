@@ -1,11 +1,12 @@
 package com.work_out_record
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import java.util.*
 
 //WorkoutDetailFragment 에서 사용되는 ViewModel
-class RecordDetailViewModel(private val app: Application) : AndroidViewModel(app) {
+class RecordAndRoutineViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val recordRepository = RecordRepository.get()
     private val recordIdLiveData = MutableLiveData<UUID>()
@@ -47,5 +48,21 @@ class RecordDetailViewModel(private val app: Application) : AndroidViewModel(app
 
     fun deleteRecord(record: Record) {
         recordRepository.deleteRecord(record)
+    }
+
+    companion object {                              //한 앱에서 하나의 RecordRepository 만 존재하기 위한 장치
+
+        private var INSTANCE: RecordAndRoutineViewModel? = null
+
+        fun init(app: Application) {                //최초 선언시 init 으로 생성하고
+            if (INSTANCE == null) {
+                INSTANCE = RecordAndRoutineViewModel(app)
+            }
+        }
+
+        fun get(): RecordAndRoutineViewModel {               //이후 get 으로 보존된 내용 가져가기
+            return INSTANCE ?:
+            throw IllegalAccessException("Must be initialized")
+        }
     }
 }

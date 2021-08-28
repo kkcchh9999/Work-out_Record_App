@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.Work_out_Record" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryVariant">@color/green</item>
+        <item name="colorPrimary">@color/green1</item>
+        <item name="colorPrimaryVariant">@color/green1</item>
         <item name="colorOnPrimary">@color/gray</item>
         <item name="android:textColorPrimary">@color/gray</item>
 
@@ -13,12 +13,8 @@
 
         <item name="iconTint">@color/gray</item>
         <item name="android:navigationBarColor">@color/green1</item>
-        <item name="colorControlActivated">@color/green2</item>
-        <item name="colorAccent">@color/green2</item>
-
-    </style>
-    <style name="PopupMenuStyle" parent="Theme.AppCompat.Light">
-        <item name="android:background">@color/green</item>
+        <item name="colorControlActivated">@color/green</item>
+        <item name="colorAccent">@color/green</item>
         <item name="android:textColor">@color/black </item>
     </style>
 

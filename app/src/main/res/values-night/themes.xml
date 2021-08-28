@@ -1,20 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Work_out_Record" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Work_out_Record" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryVariant">@color/green</item>
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryVariant">@color/darkGreen</item>
         <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/green1</item>
-        <item name="colorSecondaryVariant">@color/green2</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:textColorPrimary">@color/white</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
 
-        <!-- 아이콘 색상 설정 -->
         <item name="iconTint">@color/white</item>
-
+        <item name="android:navigationBarColor">@color/darkGreen</item>
+        <item name="colorControlActivated">@color/green1</item>
+        <item name="colorAccent">@color/green1</item>
+        <item name="android:textColor">@color/white</item>
     </style>
+
 </resources>

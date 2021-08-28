@@ -1,27 +1,17 @@
 package com.work_out_record
 
 import android.app.AlertDialog
-import android.app.Application
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.text.method.KeyListener
-import android.util.Log
 import android.view.*
 import android.widget.EditText
-import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.core.view.marginTop
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import java.util.*
 import androidx.lifecycle.Observer
 
@@ -38,9 +28,7 @@ class WorkoutDetailFragment : Fragment() {
     private lateinit var savedRoutineName: Array<String>
     private val routineCode: Array<String> = arrayOf("루틴0", "루틴1", "루틴2", "루틴3", "루틴4")
 
-    private val recordDetailViewModel: RecordDetailViewModel by lazy {
-        ViewModelProvider(this).get(RecordDetailViewModel::class.java)
-    }
+    private val recordDetailViewModel = RecordAndRoutineViewModel.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

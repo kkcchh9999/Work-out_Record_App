@@ -2,7 +2,7 @@ package com.work_out_record
 
 import androidx.lifecycle.ViewModel
 
-class RecordViewModel : ViewModel() {
+class RecordsViewModel : ViewModel() {
 
     private val recordRepository = RecordRepository.get()
     var recordLiveData = recordRepository.getRecords()

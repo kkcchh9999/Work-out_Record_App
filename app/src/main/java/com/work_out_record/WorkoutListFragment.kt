@@ -1,15 +1,17 @@
 package com.work_out_record
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.*
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,13 +32,16 @@ class WorkoutListFragment: Fragment() {
 
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
+    private val recordAndRoutineViewModel = RecordAndRoutineViewModel.get()
 
     private lateinit var noRecordSearchTextView: TextView
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
+    private lateinit var savedRoutineName: Array<String>
+    private val routineCode: Array<String> = arrayOf("루틴0", "루틴1", "루틴2", "루틴3", "루틴4")
 
-    private val recordViewModel: RecordViewModel by lazy {
-        ViewModelProvider(this).get(RecordViewModel::class.java)
+    private val recordViewModel: RecordsViewModel by lazy {
+        ViewModelProvider(this).get(RecordsViewModel::class.java)
     }
 
     override fun onAttach(context: Context) {
@@ -62,6 +67,8 @@ class WorkoutListFragment: Fragment() {
         noRecordTextView = view.findViewById(R.id.no_record_text)
         noRecordButton = view.findViewById(R.id.no_record_button)
         noRecordSearchTextView = view.findViewById(R.id.no_record_search)
+
+        savedRoutineName = recordAndRoutineViewModel.savedRoutineName
 
         return view
     }
@@ -135,10 +142,52 @@ class WorkoutListFragment: Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.add_record -> {
-                val record = Record()
-                record.date = Date(System.currentTimeMillis())
-                recordViewModel.addRecord(record)
-                callbacks?.onRecordSelected(record.id)
+                var selectedItem: Int = -1
+                val builder = AlertDialog.Builder(this.context)
+
+                builder.setTitle(R.string.select_routine_use)
+                    .setSingleChoiceItems(savedRoutineName, -1,
+                        DialogInterface.OnClickListener { _, which ->
+                            selectedItem = which
+                        })
+                    .setPositiveButton(R.string.add_record,
+                        DialogInterface.OnClickListener { _, _ ->
+                            if (selectedItem == -1) {
+                                Toast.makeText(this.context,
+                                    R.string.select_routine_load,
+                                    Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                val stringArr =
+                                    recordAndRoutineViewModel.loadRoutine(routineCode[selectedItem])
+                                        .split("///")
+                                if (stringArr.size == 1) {
+                                    Toast.makeText(this.context,
+                                        R.string.empty_routine,
+                                        Toast.LENGTH_SHORT)
+                                        .show()
+                                } else {
+                                    val record = Record()
+                                    record.date = Date(System.currentTimeMillis())
+                                    record.routine = stringArr[0]
+                                    record.part = stringArr[1]!!
+                                    recordViewModel.addRecord(record)
+                                    callbacks?.onRecordSelected(record.id)
+                                }
+                            }
+                        })
+                    .setNegativeButton(R.string.cancel,
+                        DialogInterface.OnClickListener { _, _ ->
+                            //유저가 취소함
+                        })
+                    .setNeutralButton(R.string.new_record,
+                        DialogInterface.OnClickListener { _, _ ->
+                        val record = Record()
+                        record.date = Date(System.currentTimeMillis())
+                        recordViewModel.addRecord(record)
+                        callbacks?.onRecordSelected(record.id)
+                    })
+                    .show()
                 true
             }
             R.id.delete_records -> {
