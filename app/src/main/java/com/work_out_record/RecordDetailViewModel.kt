@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import java.util.*
 
+//WorkoutDetailFragment 에서 사용되는 ViewModel
 class RecordDetailViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val recordRepository = RecordRepository.get()

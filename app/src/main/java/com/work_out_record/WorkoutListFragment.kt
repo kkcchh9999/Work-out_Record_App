@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -112,16 +113,7 @@ class WorkoutListFragment: Fragment() {
             }
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    recordViewModel.searchRecord(query!!)
-                    recordViewModel.recordLiveData.observe(
-                        viewLifecycleOwner,
-                        Observer { records ->
-                            records?.let {
-                                updateUI(records, 1)
-                            }
-                        }
-                    )
-                    return true
+                   return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
