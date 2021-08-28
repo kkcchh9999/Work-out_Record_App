@@ -14,7 +14,7 @@ class RecordDetailViewModel(private val app: Application) : AndroidViewModel(app
             recordRepository.getRecord(recordId)
         }
 
-    var savedRoutineName: Array<String> = arrayOf("루틴 1", "루틴 2", "루틴 3", "루틴 4", "루틴 5")
+    var savedRoutineName: Array<String> = arrayOf("빈 루틴 1", "빈 루틴 2", "빈 루틴 3", "빈 루틴 4", "빈 루틴 5")
     init {
         for (i in 0..4) {
             if (QueryPreferences.getStoredQuery(app, i.toString()) != "") {

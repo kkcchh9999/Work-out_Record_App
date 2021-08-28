@@ -1,21 +1,19 @@
 package com.work_out_record
 
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.*
 import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
 
 class WorkoutListDeleteFragment: Fragment() {
 
@@ -49,6 +47,14 @@ class WorkoutListDeleteFragment: Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        val fragmentActivity: FragmentActivity? = activity
+        if (activity != null) {
+            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.delete_records)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recordViewModel.recordLiveData.observe(
@@ -74,7 +80,7 @@ class WorkoutListDeleteFragment: Fragment() {
                 alertDialogBuilder.setTitle(R.string.delete_records)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
-                    DialogInterface.OnClickListener { dialog, which ->
+                    DialogInterface.OnClickListener { _, _ ->
                         if (deleteID.isEmpty()) {
                             Toast.makeText(this.context, R.string.select_item_first, Toast.LENGTH_SHORT).show()
                         }
@@ -86,7 +92,7 @@ class WorkoutListDeleteFragment: Fragment() {
                         }
                     })
                     .setNegativeButton(R.string.no_button,
-                    DialogInterface.OnClickListener { dialog, which ->
+                    DialogInterface.OnClickListener { _, _ ->
                         //유저가 취소함
                     })
                 alertDialogBuilder.show()
@@ -98,14 +104,14 @@ class WorkoutListDeleteFragment: Fragment() {
                 alertDialogBuilder.setTitle(R.string.delete_all)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
-                        DialogInterface.OnClickListener { dialog, which ->
+                        DialogInterface.OnClickListener { _, _ ->
                             deleteAll.forEach {
                                 recordViewModel.deleteRecord(it)
                                 fragmentManager?.popBackStack()
                             }
                         })
                     .setNegativeButton(R.string.no_button,
-                        DialogInterface.OnClickListener { dialog, which ->
+                        DialogInterface.OnClickListener { _, _ ->
                             //유저가 취소함
                         })
                 alertDialogBuilder.show()

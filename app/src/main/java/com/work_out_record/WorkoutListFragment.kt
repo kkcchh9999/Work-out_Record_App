@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -62,6 +63,14 @@ class WorkoutListFragment: Fragment() {
         noRecordSearchTextView = view.findViewById(R.id.no_record_search)
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val fragmentActivity: FragmentActivity? = activity
+        if (activity != null) {
+            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.app_name)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -20,6 +20,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.marginTop
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import java.util.*
 import androidx.lifecycle.Observer
@@ -66,6 +67,14 @@ class WorkoutDetailFragment : Fragment() {
         savedRoutineName = recordDetailViewModel.savedRoutineName
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val fragmentActivity: FragmentActivity? = activity
+        if (activity != null) {
+            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.add_record)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -230,13 +239,23 @@ class WorkoutDetailFragment : Fragment() {
                     .setPositiveButton(R.string.load_here,
                         DialogInterface.OnClickListener { _, _ ->
                             if (selectedItem == -1) {
-                                Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this.context,
+                                    R.string.select_first,
+                                    Toast.LENGTH_SHORT)
+                                    .show()
                             } else {
                                 val stringArr =
                                     recordDetailViewModel.loadRoutine(routineCode[selectedItem])
                                         .split("///")
-                                routineEditText.setText(stringArr[0])
-                                partEditText.setText(stringArr[1])
+                                if (stringArr.size == 1) {
+                                    Toast.makeText(this.context,
+                                        R.string.empty_routine,
+                                        Toast.LENGTH_SHORT)
+                                        .show()
+                                } else {
+                                    routineEditText.setText(stringArr[0])
+                                    partEditText.setText(stringArr[1]!!)
+                                }
                             }
                         })
                     .setNegativeButton(R.string.cancel,

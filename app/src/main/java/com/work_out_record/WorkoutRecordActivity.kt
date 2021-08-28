@@ -1,7 +1,8 @@
 package com.work_out_record
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
 class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks {
@@ -34,5 +35,10 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    fun setActionBarTitle(title: Int) {
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.setTitle(title)
     }
 }
