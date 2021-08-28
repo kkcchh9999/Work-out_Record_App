@@ -46,13 +46,27 @@
         android:id="@+id/no_record_button"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:backgroundTint="@color/green"
+        android:background="@android:color/transparent"
         android:src="@drawable/ic_add_record"
         android:scaleType="centerCrop"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/no_record_text"
-        app:tint="@color/white"
+        app:tint="@color/green"
         android:visibility="invisible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/FloatingButton"
+        app:fabCustomSize="65dp"
+        android:src="@drawable/ic_add_record2"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

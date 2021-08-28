@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 class WorkoutListFragment: Fragment() {
@@ -38,6 +39,7 @@ class WorkoutListFragment: Fragment() {
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
     private lateinit var savedRoutineName: Array<String>
+    private lateinit var floatingButton: FloatingActionButton
     private val routineCode: Array<String> = arrayOf("루틴0", "루틴1", "루틴2", "루틴3", "루틴4")
 
     private val recordViewModel: RecordsViewModel by lazy {
@@ -67,6 +69,57 @@ class WorkoutListFragment: Fragment() {
         noRecordTextView = view.findViewById(R.id.no_record_text)
         noRecordButton = view.findViewById(R.id.no_record_button)
         noRecordSearchTextView = view.findViewById(R.id.no_record_search)
+        floatingButton = view.findViewById(R.id.floating_button)
+        floatingButton.visibility = View.VISIBLE
+
+        floatingButton.setOnClickListener {
+            var selectedItem: Int = -1
+            val builder = AlertDialog.Builder(this.context)
+
+            builder.setTitle(R.string.select_routine_use)
+                .setSingleChoiceItems(savedRoutineName, -1,
+                    DialogInterface.OnClickListener { _, which ->
+                        selectedItem = which
+                    })
+                .setPositiveButton(R.string.add_record,
+                    DialogInterface.OnClickListener { _, _ ->
+                        if (selectedItem == -1) {
+                            Toast.makeText(this.context,
+                                R.string.select_routine_load,
+                                Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            val stringArr =
+                                recordAndRoutineViewModel.loadRoutine(routineCode[selectedItem])
+                                    .split("///")
+                            if (stringArr.size == 1) {
+                                Toast.makeText(this.context,
+                                    R.string.empty_routine,
+                                    Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                val record = Record()
+                                record.date = Date(System.currentTimeMillis())
+                                record.routine = stringArr[0]
+                                record.part = stringArr[1]!!
+                                recordViewModel.addRecord(record)
+                                callbacks?.onRecordSelected(record.id)
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel,
+                    DialogInterface.OnClickListener { _, _ ->
+                        //유저가 취소함
+                    })
+                .setNeutralButton(R.string.new_record,
+                    DialogInterface.OnClickListener { _, _ ->
+                        val record = Record()
+                        record.date = Date(System.currentTimeMillis())
+                        recordViewModel.addRecord(record)
+                        callbacks?.onRecordSelected(record.id)
+                    })
+                .show()
+        }
 
         savedRoutineName = recordAndRoutineViewModel.savedRoutineName
 
@@ -141,55 +194,7 @@ class WorkoutListFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.add_record -> {
-                var selectedItem: Int = -1
-                val builder = AlertDialog.Builder(this.context)
 
-                builder.setTitle(R.string.select_routine_use)
-                    .setSingleChoiceItems(savedRoutineName, -1,
-                        DialogInterface.OnClickListener { _, which ->
-                            selectedItem = which
-                        })
-                    .setPositiveButton(R.string.add_record,
-                        DialogInterface.OnClickListener { _, _ ->
-                            if (selectedItem == -1) {
-                                Toast.makeText(this.context,
-                                    R.string.select_routine_load,
-                                    Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                val stringArr =
-                                    recordAndRoutineViewModel.loadRoutine(routineCode[selectedItem])
-                                        .split("///")
-                                if (stringArr.size == 1) {
-                                    Toast.makeText(this.context,
-                                        R.string.empty_routine,
-                                        Toast.LENGTH_SHORT)
-                                        .show()
-                                } else {
-                                    val record = Record()
-                                    record.date = Date(System.currentTimeMillis())
-                                    record.routine = stringArr[0]
-                                    record.part = stringArr[1]!!
-                                    recordViewModel.addRecord(record)
-                                    callbacks?.onRecordSelected(record.id)
-                                }
-                            }
-                        })
-                    .setNegativeButton(R.string.cancel,
-                        DialogInterface.OnClickListener { _, _ ->
-                            //유저가 취소함
-                        })
-                    .setNeutralButton(R.string.new_record,
-                        DialogInterface.OnClickListener { _, _ ->
-                        val record = Record()
-                        record.date = Date(System.currentTimeMillis())
-                        recordViewModel.addRecord(record)
-                        callbacks?.onRecordSelected(record.id)
-                    })
-                    .show()
-                true
-            }
             R.id.delete_records -> {
                 callbacks?.onDeleteSelected()
                 true

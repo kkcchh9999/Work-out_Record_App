@@ -14,8 +14,14 @@
         <item name="iconTint">@color/white</item>
         <item name="android:navigationBarColor">@color/darkGreen</item>
         <item name="colorControlActivated">@color/green1</item>
-        <item name="colorAccent">@color/green1</item>
+        <item name="colorAccent">@color/darkGreen</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="FloatingButton" parent="@style/Theme.MaterialComponents.DayNight">
+        <item name="backgroundTint">@color/darkGreen</item>
+        <item name="tint">@color/white</item>
     </style>
 
 </resources>

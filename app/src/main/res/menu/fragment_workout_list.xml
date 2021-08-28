@@ -12,8 +12,4 @@
         android:icon="@drawable/ic_delete_record"
         app:showAsAction="always" />
 
-    <item android:id="@+id/add_record"
-        android:title="@string/add_record"
-        android:icon="@drawable/ic_add_record"
-        app:showAsAction="always"/>
 </menu>

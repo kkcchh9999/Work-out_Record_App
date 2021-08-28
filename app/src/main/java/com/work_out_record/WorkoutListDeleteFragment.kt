@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class WorkoutListDeleteFragment: Fragment() {
 
@@ -25,6 +26,7 @@ class WorkoutListDeleteFragment: Fragment() {
 
     private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
     private lateinit var deleteAll: List<Record>
+    private lateinit var floatingButton:FloatingActionButton
 
     private var position = -1
 
@@ -43,6 +45,8 @@ class WorkoutListDeleteFragment: Fragment() {
         recordRecyclerView = view.findViewById(R.id.record_recyclerview)
         recordRecyclerView.layoutManager = GridLayoutManager(context, 2)
         recordRecyclerView.adapter = adapter
+        floatingButton = view.findViewById(R.id.floating_button)
+        floatingButton.visibility = View.INVISIBLE
 
         return view
     }
