@@ -17,27 +17,28 @@ import androidx.lifecycle.Observer
 
 private const val RECORD_ID = "record_id"
 
-class WorkoutDetailFragment : Fragment() {
+class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분의 Fragment
 
+    //레이아웃 요소들 및 record 객체 선언
     private lateinit var record: Record
-
     private lateinit var dateTextView: TextView
     private lateinit var partEditText: EditText
     private lateinit var routineEditText: EditText
     private lateinit var repeatEditText: EditText
+
+    //루틴 저장을 위한 선언 및 뷰모델 선언
     private lateinit var savedRoutineName: Array<String>
     private val routineCode: Array<String> = arrayOf("루틴0", "루틴1", "루틴2", "루틴3", "루틴4")
-
     private val recordDetailViewModel = RecordAndRoutineViewModel.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(true) //옵션 메뉴 추가
 
         record = Record()
         val recordId: UUID = arguments?.getSerializable(RECORD_ID) as UUID
-        recordDetailViewModel.loadRecord(recordId)
+        recordDetailViewModel.loadRecord(recordId)  //DB 에 저장된 Record 정보 가져오기
     }
 
     override fun onCreateView(
@@ -47,11 +48,12 @@ class WorkoutDetailFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_workout_detail, container, false)
 
+        //레이아웃 요소 연동
         dateTextView = view.findViewById(R.id.date_textView) as TextView
         partEditText = view.findViewById(R.id.part_editText) as EditText
         routineEditText = view.findViewById(R.id.routine_editText) as EditText
         repeatEditText = view.findViewById(R.id.repeat_editText) as EditText
-
+        //저장된 루틴 이름 가져오기
         savedRoutineName = recordDetailViewModel.savedRoutineName
 
         return view
@@ -59,6 +61,7 @@ class WorkoutDetailFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        //액션바의 이름 설정
         val fragmentActivity: FragmentActivity? = activity
         if (activity != null) {
             (activity as WorkoutRecordActivity).setActionBarTitle(R.string.add_record)
@@ -67,12 +70,12 @@ class WorkoutDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recordDetailViewModel.recordLiveData.observe(
+        recordDetailViewModel.recordLiveData.observe(   //record 의 변경사항을 관찰하는 Observer
             viewLifecycleOwner,
             Observer { record ->
                 record?.let {
                     this.record = record
-                    updateUI()
+                    updateUI()          //변경사항 UI 에 적용
                 }
             }
         )
@@ -81,6 +84,7 @@ class WorkoutDetailFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        //EditText 의 텍스트 변경점을 확인, 적용하는 TextWatcher
         val partWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -94,6 +98,7 @@ class WorkoutDetailFragment : Fragment() {
         }
         partEditText.addTextChangedListener(partWatcher)
 
+        //EditText 의 텍스트 변경점을 확인, 적용하는 TextWatcher
         val routineWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -107,6 +112,7 @@ class WorkoutDetailFragment : Fragment() {
         }
         routineEditText.addTextChangedListener(routineWatcher)
 
+        //EditText 의 텍스트 변경점을 확인, 적용하는 TextWatcher
         val repeatWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -123,7 +129,19 @@ class WorkoutDetailFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
+        //해당 프래그먼트에서 나갈 때 일지를 저장
         recordDetailViewModel.saveRecord(record)
+
+        if (record.part.isBlank()
+            && record.repeat.isBlank()
+            && record.routine.isBlank()) {
+            Toast.makeText(
+                this.context,
+                R.string.empty_record_alert,
+                Toast.LENGTH_SHORT)
+                .show()
+            recordDetailViewModel.deleteRecord(record)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

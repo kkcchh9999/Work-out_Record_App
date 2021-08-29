@@ -17,6 +17,7 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
                 .add(R.id.fragment_container, WorkoutListFragment.newInstance())
                 .commit()
         }
+        val actionBar: ActionBar? = supportActionBar
     }
 
     override fun onRecordSelected(recordId: UUID) {
@@ -40,5 +41,6 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
     fun setActionBarTitle(title: Int) {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.setTitle(title)
+        actionBar?.elevation = 0F
     }
 }

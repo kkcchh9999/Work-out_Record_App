@@ -3,7 +3,7 @@
     <style name="Theme.Work_out_Record" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/gray</item>
-        <item name="colorPrimaryVariant">@color/darkGreen</item>
+        <item name="colorPrimaryVariant">@color/black2</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="android:textColorPrimary">@color/white</item>
 
@@ -12,7 +12,7 @@
         <!-- Customize your theme here. -->
 
         <item name="iconTint">@color/white</item>
-        <item name="android:navigationBarColor">@color/darkGreen</item>
+        <item name="android:navigationBarColor">@color/black2</item>
         <item name="colorControlActivated">@color/green1</item>
         <item name="colorAccent">@color/darkGreen</item>
         <item name="android:textColor">@color/white</item>

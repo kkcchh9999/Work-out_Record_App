@@ -2,25 +2,28 @@
     <!-- Base application theme. -->
     <style name="Theme.Work_out_Record" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/green1</item>
-        <item name="colorPrimaryVariant">@color/green1</item>
-        <item name="colorOnPrimary">@color/gray</item>
+        <item name="colorPrimary">@color/white2 </item>
+        <item name="colorPrimarySurface">@color/white2</item>
+        <item name="colorPrimaryVariant">@color/white2</item>
+        <item name="colorOnPrimary">@color/white2</item>
         <item name="android:textColorPrimary">@color/gray</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/green1</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white2</item>
         <!-- Customize your theme here. -->
 
         <item name="iconTint">@color/gray</item>
-        <item name="android:navigationBarColor">@color/green1</item>
-        <item name="colorControlActivated">@color/green</item>
+        <item name="android:navigationBarColor">@color/white2</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowElevation">0dp</item>
+        <item name="android:windowBackground">@color/white2</item>
+        <item name="colorControlActivated">@color/green2</item>
 
         <item name="android:textColor">@color/black </item>
     </style>
 
     <style name="FloatingButton" parent="@style/Theme.MaterialComponents.DayNight">
-        <item name="backgroundTint">@color/green</item>
+        <item name="backgroundTint">@color/green1</item>
     </style>
-
 
 </resources>

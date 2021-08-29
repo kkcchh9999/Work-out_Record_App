@@ -1,46 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:background="@drawable/edittext_background"
-    android:padding="8dp"
-    android:layout_marginStart="4dp"
-    android:layout_marginEnd="4dp"
-    android:layout_marginTop="8dp">
+    android:padding="16dp"
+    android:layout_margin="8dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/record_date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/record_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            tools:text="2021-08-25 수 10:20 "
-            android:textStyle="bold" />
-        <CheckBox
-            android:id="@+id/delete_checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp" />
-    </LinearLayout>
-
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="2021-08-25 수 10:20 " />
 
     <TextView
         android:id="@+id/record_part"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        tools:text="가슴, 삼두"/>
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/record_date"
+        tools:text="가슴, 삼두" />
 
     <TextView
         android:id="@+id/record_routine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="벤치프레스 100kg 48\n푸쉬 업 50개"
-        android:textSize="12sp"/>
+        android:maxLines="3"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/record_part"
+        tools:text="벤치프레스 100kg 48\n푸쉬 업 50개" />
 
-</LinearLayout>
+    <CheckBox
+        android:id="@+id/delete_checkBox"
+        android:layout_width="30dp"
+        android:layout_height="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
