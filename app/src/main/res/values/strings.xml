@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">운동일지</string>
-
+    <string name="app_name">WOR\n운동일지</string>
+    <string name="wor">운동일지</string>
     <string name="part_name">ex: 가슴, 등, 하체</string>
     <string name="training_name">ex: 종목, 중량, 횟수\n\n
         벤치프레스 60kg 48\n 데드리프트 100kg 48\n 스쿼트 100kg 48</string>
@@ -12,6 +12,7 @@
     <string name="no_record">새 일지를 작성해 보세요</string>
     <string name="no_record_search">검색 결과가 없습니다.\n다시 정확히 검색해주세요.</string>
     <string name="empty_record_alert">일지의 내용이 없어서\n저장되지 않았습니다.</string>
+    <string name="empty_records">일지가 없습니다!\n새 일지를 작성해보세요</string>
     <string name="save_routine">현재 루틴 저장하기</string>
     <string name="load_routine">저장된 루틴 불러오기</string>
     <string name="add_record">일지 추가</string>

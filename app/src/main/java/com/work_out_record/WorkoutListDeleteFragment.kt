@@ -109,10 +109,18 @@ class WorkoutListDeleteFragment: Fragment() {
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                         DialogInterface.OnClickListener { _, _ ->
-                            deleteAll.forEach {
-                                recordViewModel.deleteRecord(it)
-                                fragmentManager?.popBackStack()
+                            if (deleteAll.isEmpty()) {
+                                Toast.makeText(
+                                    this.context,
+                                    R.string.empty_records,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                deleteAll.forEach {
+                                    recordViewModel.deleteRecord(it)
+                                }
                             }
+                            fragmentManager?.popBackStack()
                         })
                     .setNegativeButton(R.string.no_button,
                         DialogInterface.OnClickListener { _, _ ->

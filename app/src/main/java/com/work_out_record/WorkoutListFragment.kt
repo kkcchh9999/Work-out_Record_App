@@ -130,7 +130,7 @@ class WorkoutListFragment: Fragment() {
         super.onResume()
         val fragmentActivity: FragmentActivity? = activity
         if (activity != null) {
-            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.app_name)
+            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.wor)
         }
     }
 
@@ -207,6 +207,7 @@ class WorkoutListFragment: Fragment() {
         adapter = RecordAdapter(records)
         recordRecyclerView.adapter = adapter
         if (records.isEmpty() && mod == 0) {
+            noRecordSearchTextView.visibility = View.INVISIBLE
             noRecordTextView.visibility = View.VISIBLE
             noRecordButton.visibility = View.VISIBLE
             noRecordButton.setOnClickListener {
@@ -220,6 +221,8 @@ class WorkoutListFragment: Fragment() {
             noRecordButton.visibility = View.INVISIBLE
         } else if (records.isEmpty() && mod == 1) {
             noRecordSearchTextView.visibility = View.VISIBLE
+            noRecordTextView.visibility = View.INVISIBLE
+            noRecordButton.visibility = View.INVISIBLE
         } else {
             noRecordSearchTextView.visibility = View.INVISIBLE
         }
