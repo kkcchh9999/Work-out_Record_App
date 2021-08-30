@@ -3,7 +3,6 @@
     <style name="Theme.Work_out_Record" parent="Theme.MaterialComponents.DayNight">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimarySurface">@color/green</item>
         <item name="colorPrimaryVariant">@color/green</item>
         <item name="colorOnPrimary">@color/green</item>
         <item name="android:textColorPrimary">@color/gray</item>
@@ -15,7 +14,6 @@
         <item name="iconTint">@color/gray</item>
         <item name="android:navigationBarColor">@color/green</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
-        <item name="android:windowElevation">0dp</item>
         <item name="android:windowBackground">@color/green</item>
         <item name="colorControlActivated">@color/green1</item>
 
