@@ -18,20 +18,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class WorkoutListDeleteFragment: Fragment() {
 
+    //리사이클러뷰 선언
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
+    //뷰모델 선언
     private val recordViewModel: RecordsViewModel by lazy {
         ViewModelProvider(this).get(RecordsViewModel::class.java)
     }
 
+    //레코드 삭제를 위한 리스트 선언
     private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
     private lateinit var deleteAll: List<Record>
-    private lateinit var floatingButton:FloatingActionButton
 
-    private var position = -1
+    //FAB 선언
+    private lateinit var floatingButton:FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //옵션 설정
         setHasOptionsMenu(true)
     }
 
@@ -42,6 +46,7 @@ class WorkoutListDeleteFragment: Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_workout_list, container, false)
 
+        //레이아웃 요소들 선언
         recordRecyclerView = view.findViewById(R.id.record_recyclerview)
         recordRecyclerView.layoutManager = GridLayoutManager(context, 2)
         recordRecyclerView.adapter = adapter
@@ -49,14 +54,6 @@ class WorkoutListDeleteFragment: Fragment() {
         floatingButton.visibility = View.INVISIBLE
 
         return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val fragmentActivity: FragmentActivity? = activity
-        if (activity != null) {
-            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.delete_records)
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,14 +69,24 @@ class WorkoutListDeleteFragment: Fragment() {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        //액션바에 텍스트 변경
+        val fragmentActivity: FragmentActivity? = activity
+        if (activity != null) {
+            (activity as WorkoutRecordActivity).setActionBarTitle(R.string.delete_records)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        //옵션 메뉴 설정
         inflater.inflate(R.menu.fragment_delete_list, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.delete_really -> {
+            R.id.delete_really -> { //삭제 버튼
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.delete_records)
                     .setMessage(R.string.delete_record_really)
@@ -102,10 +109,10 @@ class WorkoutListDeleteFragment: Fragment() {
                 val alertDialog = builder.create()
                 alertDialog.show()
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
-                return true
+                true
             }
 
-            R.id.delete_all -> {
+            R.id.delete_all -> {    //전체삭제 버튼
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.delete_all)
                     .setMessage(R.string.delete_record_really)
@@ -133,16 +140,17 @@ class WorkoutListDeleteFragment: Fragment() {
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
                 true
             }
-
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
+    //UI 업데이트 함수
     private fun updateUI(records: List<Record>) {
         adapter = RecordAdapter(records)
         recordRecyclerView.adapter = adapter
     }
 
+    //리사이클러뷰 홀더
     private inner class RecordHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private lateinit var record: Record
@@ -174,6 +182,7 @@ class WorkoutListDeleteFragment: Fragment() {
 
     }
 
+    //리사이클러뷰 어댑터
     private inner class RecordAdapter(var records: List<Record>) : RecyclerView.Adapter<RecordHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {

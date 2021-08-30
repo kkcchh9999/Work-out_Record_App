@@ -88,11 +88,9 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
         val partWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 record.part = s.toString()
             }
-
             override fun afterTextChanged(s: Editable?) {
             }
         }
@@ -102,11 +100,9 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
         val routineWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 record.routine = s.toString()
             }
-
             override fun afterTextChanged(s: Editable?) {
             }
         }
@@ -116,11 +112,9 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
         val repeatWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 record.repeat = s.toString()
             }
-
             override fun afterTextChanged(s: Editable?) {
             }
         }
@@ -146,31 +140,32 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        //옵션 메뉴 연결
         inflater.inflate(R.menu.fragment_workout_detail, menu)
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //메뉴에서 각 아이템을 눌렀을 때의 이벤트 처리
         return when (item.itemId) {
-            R.id.delete_record -> {
+            R.id.delete_record -> { //기록 삭제버튼
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.delete_record)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                         DialogInterface.OnClickListener { _, _ ->
-                            recordDetailViewModel.deleteRecord(record)
-                            fragmentManager?.popBackStack()
+                            recordDetailViewModel.deleteRecord(record)  //삭제
+                            fragmentManager?.popBackStack()             //이전 화면으로 되돌아가기
                     })
                     .setNegativeButton(R.string.no_button,
                         DialogInterface.OnClickListener { dialog, which ->
                             //유저가 취소함
                     })
                 val alertDialog = builder.create()
-                alertDialog.show()
+                alertDialog.show()  //Dialog 의 디자인 설정
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
                 true
             }
-            R.id.save_routine -> {
+            R.id.save_routine -> {  //루틴 저장버튼
                 var selectedItem = -1
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.select_routine_save)
@@ -178,7 +173,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                         DialogInterface.OnClickListener { _, which ->
                             selectedItem = which
                         })
-                    .setPositiveButton(R.string.save_here,
+                    .setPositiveButton(R.string.save_here,  //저장버튼
                     DialogInterface.OnClickListener { _, _ ->
                         if (selectedItem == -1) {
                             Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT).show()
@@ -194,11 +189,11 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                             )
                         }
                     })
-                    .setNegativeButton(R.string.cancel,
+                    .setNegativeButton(R.string.cancel,     //취소버튼
                     DialogInterface.OnClickListener { _, _ ->
                         //유저가 취소함
                     })
-                    .setNeutralButton(R.string.change_routine_name,
+                    .setNeutralButton(R.string.change_routine_name, //이름 변경버튼
                         DialogInterface.OnClickListener { _, _ ->
                             if (selectedItem == -1) {
                                 Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT).show()
@@ -243,7 +238,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
 
                 true
             }
-            R.id.load_routine -> {
+            R.id.load_routine -> {      //루틴 불러오기 버튼
                 var selectedItem: Int = -1
                 val builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
 
@@ -252,7 +247,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                         DialogInterface.OnClickListener { _, which ->
                             selectedItem = which
                         })
-                    .setPositiveButton(R.string.load_here,
+                    .setPositiveButton(R.string.load_here,  //불러오기 버튼
                         DialogInterface.OnClickListener { _, _ ->
                             if (selectedItem == -1) {
                                 Toast.makeText(this.context,
@@ -274,29 +269,27 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                                 }
                             }
                         })
-                    .setNegativeButton(R.string.cancel,
+                    .setNegativeButton(R.string.cancel,     //취소 버튼
                         DialogInterface.OnClickListener { _, _ ->
                             //유저가 취소함
                         })
                 val alertDialog = builder.create()
                 alertDialog.show()
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
-
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun updateUI() {
+    private fun updateUI() {    //UI 업데이트 함수, 각 EditText, TextView 에 저장된 내용 불러오기
         partEditText.setText(record.part)
         repeatEditText.setText(record.repeat)
         routineEditText.setText(record.routine)
         dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
     }
 
-    companion object {
+    companion object {  //프래그먼트 전환을 위한 객체
         fun newInstance(recordId: UUID): WorkoutDetailFragment {
             val args = Bundle().apply {
                 putSerializable(RECORD_ID, recordId)
