@@ -153,8 +153,8 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete_record -> {
-                val alertDialogBuilder = AlertDialog.Builder(this.context)
-                alertDialogBuilder.setTitle(R.string.delete_record)
+                val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
+                builder.setTitle(R.string.delete_record)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                         DialogInterface.OnClickListener { _, _ ->
@@ -164,14 +164,16 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                     .setNegativeButton(R.string.no_button,
                         DialogInterface.OnClickListener { dialog, which ->
                             //유저가 취소함
-                    }).show()
-                return true
+                    })
+                val alertDialog = builder.create()
+                alertDialog.show()
+                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
+                true
             }
             R.id.save_routine -> {
                 var selectedItem = -1
-                val selectDialogBuilder = AlertDialog.Builder(this.context)
-
-                selectDialogBuilder.setTitle(R.string.select_routine_save)
+                val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
+                builder.setTitle(R.string.select_routine_save)
                     .setSingleChoiceItems(savedRoutineName, -1,
                         DialogInterface.OnClickListener { _, which ->
                             selectedItem = which
@@ -181,6 +183,11 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                         if (selectedItem == -1) {
                             Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT).show()
                         } else {
+                            val mText = record.part
+                            recordDetailViewModel.saveRoutineName(
+                                selectedItem,
+                                mText
+                            )
                             recordDetailViewModel.saveRoutine(
                                 routineCode[selectedItem],
                                 record.routine + "///" + record.part
@@ -199,7 +206,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                                 val inflater = requireActivity()
                                     .layoutInflater
                                     .inflate(R.layout.change_routine_name_dialog, null)
-                                val builder: AlertDialog.Builder = AlertDialog.Builder(this.context)
+                                val builder: AlertDialog.Builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
                                 builder.setTitle(R.string.save_routine)
                                     .setView(inflater)
 
@@ -225,17 +232,20 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                                     DialogInterface.OnClickListener { _, _ ->
                                         //유저가 취소함
                                     })
-
-                                builder.show()
+                                val alertDialog = builder.create()
+                                alertDialog.show()
+                                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
                             }
                         })
-                    .show()
+                val alertDialog = builder.create()
+                alertDialog.show()
+                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
 
-                return true
+                true
             }
             R.id.load_routine -> {
                 var selectedItem: Int = -1
-                val builder = AlertDialog.Builder(this.context)
+                val builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
 
                 builder.setTitle(R.string.select_routine_load)
                     .setSingleChoiceItems(savedRoutineName, -1,
@@ -246,7 +256,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                         DialogInterface.OnClickListener { _, _ ->
                             if (selectedItem == -1) {
                                 Toast.makeText(this.context,
-                                    R.string.select_first,
+                                    R.string.select_routine_load,
                                     Toast.LENGTH_SHORT)
                                     .show()
                             } else {
@@ -268,8 +278,11 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                         DialogInterface.OnClickListener { _, _ ->
                             //유저가 취소함
                         })
-                    .show()
-                return true
+                val alertDialog = builder.create()
+                alertDialog.show()
+                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
+
+                true
             }
 
             else -> super.onOptionsItemSelected(item)

@@ -80,8 +80,8 @@ class WorkoutListDeleteFragment: Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.delete_really -> {
-                val alertDialogBuilder = AlertDialog.Builder(this.context)
-                alertDialogBuilder.setTitle(R.string.delete_records)
+                val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
+                builder.setTitle(R.string.delete_records)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                     DialogInterface.OnClickListener { _, _ ->
@@ -99,13 +99,15 @@ class WorkoutListDeleteFragment: Fragment() {
                     DialogInterface.OnClickListener { _, _ ->
                         //유저가 취소함
                     })
-                alertDialogBuilder.show()
+                val alertDialog = builder.create()
+                alertDialog.show()
+                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
                 return true
             }
 
             R.id.delete_all -> {
-                val alertDialogBuilder = AlertDialog.Builder(this.context)
-                alertDialogBuilder.setTitle(R.string.delete_all)
+                val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
+                builder.setTitle(R.string.delete_all)
                     .setMessage(R.string.delete_record_really)
                     .setPositiveButton(R.string.yes_button,
                         DialogInterface.OnClickListener { _, _ ->
@@ -126,8 +128,10 @@ class WorkoutListDeleteFragment: Fragment() {
                         DialogInterface.OnClickListener { _, _ ->
                             //유저가 취소함
                         })
-                alertDialogBuilder.show()
-                return true
+                val alertDialog = builder.create()
+                alertDialog.show()
+                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
+                true
             }
 
             else -> return super.onOptionsItemSelected(item)

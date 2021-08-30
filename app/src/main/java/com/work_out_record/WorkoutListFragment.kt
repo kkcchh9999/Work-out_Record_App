@@ -74,9 +74,9 @@ class WorkoutListFragment: Fragment() {
 
         floatingButton.setOnClickListener {
             var selectedItem: Int = -1
-            val builder = AlertDialog.Builder(this.context)
+            val builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
 
-            builder.setTitle(R.string.select_routine_use)
+            builder.setTitle(R.string.select_routine_load)
                 .setSingleChoiceItems(savedRoutineName, -1,
                     DialogInterface.OnClickListener { _, which ->
                         selectedItem = which
@@ -118,7 +118,9 @@ class WorkoutListFragment: Fragment() {
                         recordViewModel.addRecord(record)
                         callbacks?.onRecordSelected(record.id)
                     })
-                .show()
+            val alertDialog = builder.create()
+            alertDialog.show()
+            alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
         }
 
         savedRoutineName = recordAndRoutineViewModel.savedRoutineName

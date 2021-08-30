@@ -17,13 +17,17 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowElevation">0dp</item>
         <item name="android:windowBackground">@color/green</item>
-        <item name="colorControlActivated">@color/green2</item>
+        <item name="colorControlActivated">@color/green1</item>
 
         <item name="android:textColor">@color/black </item>
     </style>
 
     <style name="FloatingButton" parent="@style/Theme.MaterialComponents.DayNight">
         <item name="backgroundTint">@color/green1</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/gray</item>
     </style>
 
 </resources>
