@@ -27,7 +27,6 @@ class WorkoutListDeleteFragment: Fragment() {
     }
 
     //레코드 삭제를 위한 리스트 선언
-    private var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
     private lateinit var deleteAll: List<Record>
 
     //FAB 선언
@@ -58,7 +57,7 @@ class WorkoutListDeleteFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recordViewModel.recordLiveData.observe(
+        recordViewModel.recordLiveData.observe( //record LiveData 의 변화를 관찰하는 Observer
             viewLifecycleOwner,
             Observer { records ->
                 deleteAll = records
@@ -76,6 +75,12 @@ class WorkoutListDeleteFragment: Fragment() {
         if (activity != null) {
             (activity as WorkoutRecordActivity).setActionBarTitle(R.string.delete_records)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //삭제하지않고 돌아갔을 때
+        deleteID.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -155,12 +160,13 @@ class WorkoutListDeleteFragment: Fragment() {
 
         private lateinit var record: Record
 
+        //레이아웃 요소들
         private val dateTextView: TextView = itemView.findViewById(R.id.record_date)
         private val partTextView: TextView = itemView.findViewById(R.id.record_part)
         private val routineTextView: TextView = itemView.findViewById(R.id.record_routine)
         private val deleteCheckBox: CheckBox = itemView.findViewById(R.id.delete_checkBox)
 
-        fun bind(record: Record) {
+        fun bind(record: Record) {  //데이터 바인딩 함수
             this.record = record
             dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
@@ -168,7 +174,7 @@ class WorkoutListDeleteFragment: Fragment() {
             deleteCheckBox.isChecked = deleteID.contains(record)
         }
 
-        fun select(record: Record) {
+        fun select(record: Record) { //checkBox 아이템이 선택되었을 때 함수
             this.record = record
             deleteCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
@@ -202,6 +208,9 @@ class WorkoutListDeleteFragment: Fragment() {
     }
 
     companion object {
+        //레코드 삭제를 위한 리스트 선언
+        var deleteID: MutableList<Record> = emptyList<Record>().toMutableList()
+
         fun newInstance() = WorkoutListDeleteFragment()
     }
 }

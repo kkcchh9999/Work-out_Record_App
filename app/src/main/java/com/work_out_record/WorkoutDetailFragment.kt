@@ -187,6 +187,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                                 routineCode[selectedItem],
                                 record.routine + "///" + record.part
                             )
+                            fragmentManager?.popBackStack()
                         }
                     })
                     .setNegativeButton(R.string.cancel,     //취소버튼

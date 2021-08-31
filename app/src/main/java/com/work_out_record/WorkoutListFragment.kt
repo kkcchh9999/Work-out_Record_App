@@ -230,7 +230,7 @@ class WorkoutListFragment: Fragment() {
         }
     }
 
-    private inner class RecordHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class RecordHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
 
         private lateinit var record: Record
 
@@ -240,6 +240,7 @@ class WorkoutListFragment: Fragment() {
 
         init {
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
         }
         fun bind(record: Record) {
             this.record = record
@@ -250,6 +251,12 @@ class WorkoutListFragment: Fragment() {
 
         override fun onClick(v: View?) {
             callbacks?.onRecordSelected(record.id)
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+            callbacks?.onDeleteSelected()
+            WorkoutListDeleteFragment.deleteID.add(record)
+            return true
         }
     }
 
