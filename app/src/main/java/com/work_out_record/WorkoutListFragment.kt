@@ -79,47 +79,51 @@ class WorkoutListFragment: Fragment() {
             val builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
 
             builder.setTitle(R.string.select_routine_load)
-                .setSingleChoiceItems(savedRoutineName, -1,
-                    DialogInterface.OnClickListener { _, which ->
-                        selectedItem = which
-                    })
-                .setPositiveButton(R.string.add_record,
-                    DialogInterface.OnClickListener { _, _ ->
-                        if (selectedItem == -1) {
-                            Toast.makeText(this.context,
-                                R.string.select_routine_load,
-                                Toast.LENGTH_SHORT)
+                .setSingleChoiceItems(savedRoutineName, -1
+                ) { _, which ->
+                    selectedItem = which
+                }
+                .setPositiveButton(R.string.add_record
+                ) { _, _ ->
+                    if (selectedItem == -1) {
+                        Toast.makeText(
+                            this.context,
+                            R.string.select_routine_load,
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else {
+                        val stringArr =
+                            recordAndRoutineViewModel.loadRoutine(routineCode[selectedItem])
+                                .split("///")
+                        if (stringArr.size == 1) {
+                            Toast.makeText(
+                                this.context,
+                                R.string.empty_routine,
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                         } else {
-                            val stringArr =
-                                recordAndRoutineViewModel.loadRoutine(routineCode[selectedItem])
-                                    .split("///")
-                            if (stringArr.size == 1) {
-                                Toast.makeText(this.context,
-                                    R.string.empty_routine,
-                                    Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                val record = Record()
-                                record.date = Date(System.currentTimeMillis())
-                                record.routine = stringArr[0]
-                                record.part = stringArr[1]!!
-                                recordViewModel.addRecord(record)
-                                callbacks?.onRecordSelected(record.id)
-                            }
+                            val record = Record()
+                            record.date = Date(System.currentTimeMillis())
+                            record.routine = stringArr[0]
+                            record.part = stringArr[1]
+                            recordViewModel.addRecord(record)
+                            callbacks?.onRecordSelected(record.id)
                         }
-                    })
-                .setNegativeButton(R.string.cancel,
-                    DialogInterface.OnClickListener { _, _ ->
-                        //유저가 취소함
-                    })
-                .setNeutralButton(R.string.new_record,
-                    DialogInterface.OnClickListener { _, _ ->
-                        val record = Record()
-                        record.date = Date(System.currentTimeMillis())
-                        recordViewModel.addRecord(record)
-                        callbacks?.onRecordSelected(record.id)
-                    })
+                    }
+                }
+                .setNegativeButton(R.string.cancel
+                ) { _, _ ->
+                    //유저가 취소함
+                }
+                .setNeutralButton(R.string.new_record
+                ) { _, _ ->
+                    val record = Record()
+                    record.date = Date(System.currentTimeMillis())
+                    recordViewModel.addRecord(record)
+                    callbacks?.onRecordSelected(record.id)
+                }
             val alertDialog = builder.create()
             alertDialog.show()
             alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
@@ -132,7 +136,7 @@ class WorkoutListFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val fragmentActivity: FragmentActivity? = activity
+        activity
         if (activity != null) {
             (activity as WorkoutRecordActivity).setActionBarTitle(R.string.wor)
         }
@@ -142,7 +146,7 @@ class WorkoutListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         recordViewModel.recordLiveData.observe(
             viewLifecycleOwner,
-            Observer { records ->
+            { records ->
                 records?.let {
                     updateUI(records, 0)
                 }
@@ -167,7 +171,7 @@ class WorkoutListFragment: Fragment() {
                 recordViewModel.rollbackRecord()
                 recordViewModel.recordLiveData.observe(
                     viewLifecycleOwner,
-                    Observer { records ->
+                    { records ->
                         records?.let {
                             updateUI(records, 0)
                         }
@@ -184,7 +188,7 @@ class WorkoutListFragment: Fragment() {
                     recordViewModel.searchRecord(newText!!)
                     recordViewModel.recordLiveData.observe(
                         viewLifecycleOwner,
-                        Observer { records ->
+                        { records ->
                             records?.let {
                                 updateUI(records, 1)
                             }
