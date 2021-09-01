@@ -31,20 +31,22 @@ class WorkoutListFragment: Fragment() {
     }
     private var callbacks: Callbacks? = null
 
+    //리사이클러 뷰 선언
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
+    //뷰모델 선언
     private val recordAndRoutineViewModel = RecordAndRoutineViewModel.get()
+    private val recordViewModel: RecordsViewModel by lazy {
+        ViewModelProvider(this).get(RecordsViewModel::class.java)
+    }
 
+    //레이아웃 아이템 선언
     private lateinit var noRecordSearchTextView: TextView
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
     private lateinit var savedRoutineName: Array<String>
     private lateinit var floatingButton: FloatingActionButton
     private val routineCode: Array<String> = arrayOf("루틴0", "루틴1", "루틴2", "루틴3", "루틴4")
-
-    private val recordViewModel: RecordsViewModel by lazy {
-        ViewModelProvider(this).get(RecordsViewModel::class.java)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
