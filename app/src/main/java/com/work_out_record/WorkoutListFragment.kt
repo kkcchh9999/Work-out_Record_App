@@ -28,6 +28,7 @@ class WorkoutListFragment: Fragment() {
     interface Callbacks {
         fun onRecordSelected(recordId: UUID)
         fun onDeleteSelected()
+        fun onCalendarSelected()
     }
     private var callbacks: Callbacks? = null
 
@@ -202,11 +203,15 @@ class WorkoutListFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-
             R.id.delete_records -> {
                 callbacks?.onDeleteSelected()
                 true
             }
+            R.id.view_calender -> {
+                callbacks?.onCalendarSelected()
+                true
+            }
+
             else -> return super.onOptionsItemSelected(item)
         }
     }
