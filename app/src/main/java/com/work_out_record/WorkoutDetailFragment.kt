@@ -62,7 +62,6 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
     override fun onResume() {
         super.onResume()
         //액션바의 이름 설정
-        val fragmentActivity: FragmentActivity? = activity
         if (activity != null) {
             (activity as WorkoutRecordActivity).setActionBarTitle(R.string.add_record)
         }
@@ -72,7 +71,7 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
         super.onViewCreated(view, savedInstanceState)
         recordDetailViewModel.recordLiveData.observe(   //record 의 변경사항을 관찰하는 Observer
             viewLifecycleOwner,
-            Observer { record ->
+            { record ->
                 record?.let {
                     this.record = record
                     updateUI()          //변경사항 UI 에 적용
@@ -169,14 +168,14 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                 var selectedItem = -1
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.select_routine_save)
-                    .setSingleChoiceItems(savedRoutineName, -1,
-                        DialogInterface.OnClickListener { _, which ->
-                            selectedItem = which
-                        })
-                    .setPositiveButton(R.string.save_here,  //저장버튼
-                    DialogInterface.OnClickListener { _, _ ->
+                    .setSingleChoiceItems(savedRoutineName, -1) { _, which ->
+                        selectedItem = which
+                    }
+                    .setPositiveButton(R.string.save_here)  //저장버튼
+                    { _, _ ->
                         if (selectedItem == -1) {
-                            Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT)
+                                .show()
                         } else {
                             val mText = record.part
                             recordDetailViewModel.saveRoutineName(
@@ -189,50 +188,57 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                             )
                             fragmentManager?.popBackStack()
                         }
-                    })
-                    .setNegativeButton(R.string.cancel,     //취소버튼
-                    DialogInterface.OnClickListener { _, _ ->
+                    }
+                    .setNegativeButton(R.string.cancel)     //취소버튼
+                    { _, _ ->
                         //유저가 취소함
-                    })
-                    .setNeutralButton(R.string.change_routine_name, //이름 변경버튼
-                        DialogInterface.OnClickListener { _, _ ->
-                            if (selectedItem == -1) {
-                                Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT).show()
-                            } else {
-                                val inflater = requireActivity()
-                                    .layoutInflater
-                                    .inflate(R.layout.change_routine_name_dialog, null)
-                                val builder: AlertDialog.Builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
-                                builder.setTitle(R.string.save_routine)
-                                    .setView(inflater)
+                    }
+                    .setNeutralButton(R.string.change_routine_name) //이름 변경버튼
+                    { _, _ ->
+                        if (selectedItem == -1) {
+                            Toast.makeText(this.context, R.string.select_first, Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            val inflater = requireActivity()
+                                .layoutInflater
+                                .inflate(R.layout.change_routine_name_dialog, null)
+                            val builder: AlertDialog.Builder =
+                                AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
+                            builder.setTitle(R.string.save_routine)
+                                .setView(inflater)
 
-                                val input = inflater.findViewById(R.id.change_routine_edittext) as EditText
+                            val input =
+                                inflater.findViewById(R.id.change_routine_edittext) as EditText
 
-                                builder.setPositiveButton(R.string.save_here,
-                                    DialogInterface.OnClickListener { _, _ ->
-                                        var mText = input.text.toString()
-                                        if (mText == "") {
-                                            Toast.makeText(this.context, R.string.type_first, Toast.LENGTH_SHORT).show()
-                                        } else {
-                                            recordDetailViewModel.saveRoutineName(
-                                                selectedItem,
-                                                mText
-                                            )
-                                            recordDetailViewModel.saveRoutine(
-                                                routineCode[selectedItem],
-                                                record.routine + "///" + record.part
-                                            )
-                                        }
-                                    })
-                                builder.setNegativeButton(R.string.cancel,
-                                    DialogInterface.OnClickListener { _, _ ->
-                                        //유저가 취소함
-                                    })
-                                val alertDialog = builder.create()
-                                alertDialog.show()
-                                alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
-                            }
-                        })
+                            builder.setPositiveButton(R.string.save_here,
+                                DialogInterface.OnClickListener { _, _ ->
+                                    var mText = input.text.toString()
+                                    if (mText == "") {
+                                        Toast.makeText(
+                                            this.context,
+                                            R.string.type_first,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        recordDetailViewModel.saveRoutineName(
+                                            selectedItem,
+                                            mText
+                                        )
+                                        recordDetailViewModel.saveRoutine(
+                                            routineCode[selectedItem],
+                                            record.routine + "///" + record.part
+                                        )
+                                    }
+                                })
+                            builder.setNegativeButton(R.string.cancel,
+                                DialogInterface.OnClickListener { _, _ ->
+                                    //유저가 취소함
+                                })
+                            val alertDialog = builder.create()
+                            alertDialog.show()
+                            alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
+                        }
+                    }
                 val alertDialog = builder.create()
                 alertDialog.show()
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
@@ -244,36 +250,39 @@ class WorkoutDetailFragment : Fragment() {  //운동일지를 작성하는부분
                 val builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
 
                 builder.setTitle(R.string.select_routine_load)
-                    .setSingleChoiceItems(savedRoutineName, -1,
-                        DialogInterface.OnClickListener { _, which ->
-                            selectedItem = which
-                        })
-                    .setPositiveButton(R.string.load_here,  //불러오기 버튼
-                        DialogInterface.OnClickListener { _, _ ->
-                            if (selectedItem == -1) {
-                                Toast.makeText(this.context,
-                                    R.string.select_routine_load,
-                                    Toast.LENGTH_SHORT)
+                    .setSingleChoiceItems(savedRoutineName, -1) { _, which ->
+                        selectedItem = which
+                    }
+                    .setPositiveButton(R.string.load_here)  //불러오기 버튼
+                    { _, _ ->
+                        if (selectedItem == -1) {
+                            Toast.makeText(
+                                this.context,
+                                R.string.select_routine_load,
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        } else {
+                            val stringArr =
+                                recordDetailViewModel.loadRoutine(routineCode[selectedItem])
+                                    .split("///")
+                            if (stringArr.size == 1) {
+                                Toast.makeText(
+                                    this.context,
+                                    R.string.empty_routine,
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             } else {
-                                val stringArr =
-                                    recordDetailViewModel.loadRoutine(routineCode[selectedItem])
-                                        .split("///")
-                                if (stringArr.size == 1) {
-                                    Toast.makeText(this.context,
-                                        R.string.empty_routine,
-                                        Toast.LENGTH_SHORT)
-                                        .show()
-                                } else {
-                                    routineEditText.setText(stringArr[0])
-                                    partEditText.setText(stringArr[1]!!)
-                                }
+                                routineEditText.setText(stringArr[0])
+                                partEditText.setText(stringArr[1]!!)
                             }
-                        })
-                    .setNegativeButton(R.string.cancel,     //취소 버튼
-                        DialogInterface.OnClickListener { _, _ ->
-                            //유저가 취소함
-                        })
+                        }
+                    }
+                    .setNegativeButton(R.string.cancel)     //취소 버튼
+                    { _, _ ->
+                        //유저가 취소함
+                    }
                 val alertDialog = builder.create()
                 alertDialog.show()
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)

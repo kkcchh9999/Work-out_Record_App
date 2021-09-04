@@ -71,7 +71,6 @@ class WorkoutListDeleteFragment: Fragment() {
     override fun onResume() {
         super.onResume()
         //액션바에 텍스트 변경
-        val fragmentActivity: FragmentActivity? = activity
         if (activity != null) {
             (activity as WorkoutRecordActivity).setActionBarTitle(R.string.delete_records)
         }
@@ -95,22 +94,23 @@ class WorkoutListDeleteFragment: Fragment() {
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.delete_records)
                     .setMessage(R.string.delete_record_really)
-                    .setPositiveButton(R.string.yes_button,
-                    DialogInterface.OnClickListener { _, _ ->
+                    .setPositiveButton(R.string.yes_button) { _, _ ->
                         if (deleteID.isEmpty()) {
-                            Toast.makeText(this.context, R.string.select_item_first, Toast.LENGTH_SHORT).show()
-                        }
-                        else {
+                            Toast.makeText(
+                                this.context,
+                                R.string.select_item_first,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
                             deleteID.forEach {
                                 recordViewModel.deleteRecord(it)
                                 fragmentManager?.popBackStack()
                             }
                         }
-                    })
-                    .setNegativeButton(R.string.no_button,
-                    DialogInterface.OnClickListener { _, _ ->
+                    }
+                    .setNegativeButton(R.string.no_button) { _, _ ->
                         //유저가 취소함
-                    })
+                    }
                 val alertDialog = builder.create()
                 alertDialog.show()
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
@@ -121,25 +121,23 @@ class WorkoutListDeleteFragment: Fragment() {
                 val builder = AlertDialog.Builder(this.context,R.style.AlertDialogTheme)
                 builder.setTitle(R.string.delete_all)
                     .setMessage(R.string.delete_record_really)
-                    .setPositiveButton(R.string.yes_button,
-                        DialogInterface.OnClickListener { _, _ ->
-                            if (deleteAll.isEmpty()) {
-                                Toast.makeText(
-                                    this.context,
-                                    R.string.empty_records,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                deleteAll.forEach {
-                                    recordViewModel.deleteRecord(it)
-                                }
+                    .setPositiveButton(R.string.yes_button) { _, _ ->
+                        if (deleteAll.isEmpty()) {
+                            Toast.makeText(
+                                this.context,
+                                R.string.empty_records,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            deleteAll.forEach {
+                                recordViewModel.deleteRecord(it)
                             }
-                            fragmentManager?.popBackStack()
-                        })
-                    .setNegativeButton(R.string.no_button,
-                        DialogInterface.OnClickListener { _, _ ->
-                            //유저가 취소함
-                        })
+                        }
+                        fragmentManager?.popBackStack()
+                    }
+                    .setNegativeButton(R.string.no_button) { _, _ ->
+                        //유저가 취소함
+                    }
                 val alertDialog = builder.create()
                 alertDialog.show()
                 alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
