@@ -19,18 +19,18 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Month
 import java.util.*
+
+private const val CALENDAR_VIEW = "calendar_view"
 
 class WorkoutCalendarFragment : Fragment() {
 
     private lateinit var calendarView:  MaterialCalendarView
     private lateinit var workoutPart: TextView
     private lateinit var workoutRoutine: TextView
-
-    private var dayList: MutableList<Date> = emptyList<Date>().toMutableList()
-    private val recordsViewModel: RecordsViewModel by lazy {
-        ViewModelProvider(this).get(RecordsViewModel::class.java)
-    }
+    private var dates: MutableList<Date> = emptyList<Date>().toMutableList()
+    private var calendarDays: MutableList<CalendarDay> = emptyList<CalendarDay>().toMutableList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,21 +43,18 @@ class WorkoutCalendarFragment : Fragment() {
         workoutPart = view.findViewById(R.id.part_textview)
         workoutRoutine = view.findViewById(R.id.routine_textview)
 
-        recordsViewModel.recordLiveData.observe(
-            viewLifecycleOwner,
-            { records ->
-                records?.let {
-                    updateDate(records)
-                }
-            }
-        )
+        for (i in 0 until dates.size) {
+            Log.d("이거 찍냐?", "$i")
+            calendarDays.add(CalendarDay(dates[i]))
+        }
 
         calendarView.addDecorators(
             TodayDecorator(this.context),
             SundayDecorator(),
             SaturdayDecorator(),
-            CheckedDecorator(this.context, dayList)
+            CheckedDecorator(this.context, calendarDays)
         )
+
         return view
     }
 
@@ -67,13 +64,8 @@ class WorkoutCalendarFragment : Fragment() {
         if (activity != null) {
             (activity as WorkoutRecordActivity).setActionBarTitle(R.string.calendar)
         }
-    }
 
-    //데이터베이스에서 날짜 가져오기
-    private fun updateDate(records: List<Record>) {
-        for (i in records.indices) {
-            dayList.add(records[i].date!!)
-        }
+
     }
 
     //오늘 날짜에 흰색 체크
@@ -119,16 +111,14 @@ class WorkoutCalendarFragment : Fragment() {
         }
     }
 
-    class CheckedDecorator(context: Context?, private val dayList: MutableList<Date>) : DayViewDecorator {
+    class CheckedDecorator(context: Context?, private val calendarDays: MutableList<CalendarDay>) : DayViewDecorator {
         private val calendar = Calendar.getInstance()
-        @SuppressLint("SimpleDateFormat")
-        private val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
         @SuppressLint("UseCompatLoadingForDrawables")
         private val drawable = context?.getDrawable(R.drawable.style_checked)
 
         override fun shouldDecorate(day: CalendarDay?): Boolean {
-            //수정 요망
-            return false
+            val ret: Boolean = calendarDays.contains(day)
+            return ret
         }
 
         override fun decorate(view: DayViewFacade?) {
@@ -137,7 +127,14 @@ class WorkoutCalendarFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = WorkoutCalendarFragment()
+        fun newInstance(dates: List<Date>): WorkoutCalendarFragment {
+            val args = Bundle().apply{
+              //  putSerializable(CALENDAR_VIEW, dates)
+            }
 
+            return WorkoutCalendarFragment().apply {
+                arguments = args
+            }
+        }
     }
 }

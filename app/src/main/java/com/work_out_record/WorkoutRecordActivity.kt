@@ -38,14 +38,14 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .commit()
     }
 
-    override fun onCalendarSelected() {
-        val fragment = WorkoutCalendarFragment.newInstance()
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
+//    override fun onCalendarSelected(dateList: MutableList<Date>) {
+//        val fragment = WorkoutCalendarFragment.newInstance()
+//        supportFragmentManager
+//            .beginTransaction()
+//            .replace(R.id.fragment_container, fragment)
+//            .addToBackStack(null)
+//            .commit()
+//    }
 
     fun setActionBarTitle(title: Int) {
         val actionBar: ActionBar? = supportActionBar
