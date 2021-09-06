@@ -26,7 +26,7 @@ class WorkoutListFragment: Fragment() {
     interface Callbacks {
         fun onRecordSelected(recordId: UUID)
         fun onDeleteSelected()
-        fun onCalendarSelected(dates: ArrayList<Date>)
+        fun onCalendarSelected(records: ArrayList<Record>)
     }
     private var callbacks: Callbacks? = null
 
@@ -42,7 +42,7 @@ class WorkoutListFragment: Fragment() {
     //레이아웃 아이템 선언
     private lateinit var noRecordSearchTextView: TextView
 
-    private val dates = ArrayList<Date>()
+    private val records = ArrayList<Record>()
 
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
@@ -152,7 +152,7 @@ class WorkoutListFragment: Fragment() {
                 records?.let {
                     updateUI(records, 0)
                     for (i in records.indices) {
-                        dates.add(records[i].date!!)
+                        this.records.add(records[i])
                     }
                 }
             }
@@ -212,7 +212,7 @@ class WorkoutListFragment: Fragment() {
                 true
             }
             R.id.view_calender -> {
-                callbacks?.onCalendarSelected(dates)
+                callbacks?.onCalendarSelected(records)
                 true
             }
 
