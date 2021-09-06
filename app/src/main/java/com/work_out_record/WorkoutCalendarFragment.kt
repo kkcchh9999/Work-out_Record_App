@@ -11,16 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.Month
 import java.util.*
+import kotlin.collections.ArrayList
 
 private const val CALENDAR_VIEW = "calendar_view"
 
@@ -29,8 +25,15 @@ class WorkoutCalendarFragment : Fragment() {
     private lateinit var calendarView:  MaterialCalendarView
     private lateinit var workoutPart: TextView
     private lateinit var workoutRoutine: TextView
-    private var dates: MutableList<Date> = emptyList<Date>().toMutableList()
+    private var dates = ArrayList<Date>()
+
     private var calendarDays: MutableList<CalendarDay> = emptyList<CalendarDay>().toMutableList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        dates = arguments?.get(CALENDAR_VIEW) as ArrayList<Date>
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,7 +96,7 @@ class WorkoutCalendarFragment : Fragment() {
         }
 
         override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(object : ForegroundColorSpan(Color.RED){})
+            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 255, 90, 90)){})
         }
     }
 
@@ -107,7 +110,7 @@ class WorkoutCalendarFragment : Fragment() {
         }
 
         override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(object : ForegroundColorSpan(Color.BLUE){})
+            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 90, 90, 255)){})
         }
     }
 
@@ -117,8 +120,7 @@ class WorkoutCalendarFragment : Fragment() {
         private val drawable = context?.getDrawable(R.drawable.style_checked)
 
         override fun shouldDecorate(day: CalendarDay?): Boolean {
-            val ret: Boolean = calendarDays.contains(day)
-            return ret
+            return calendarDays.contains(day)
         }
 
         override fun decorate(view: DayViewFacade?) {
@@ -127,9 +129,9 @@ class WorkoutCalendarFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(dates: List<Date>): WorkoutCalendarFragment {
+        fun newInstance(dates: ArrayList<Date>): WorkoutCalendarFragment {
             val args = Bundle().apply{
-              //  putSerializable(CALENDAR_VIEW, dates)
+                putSerializable(CALENDAR_VIEW, dates)
             }
 
             return WorkoutCalendarFragment().apply {

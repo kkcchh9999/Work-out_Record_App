@@ -2,7 +2,6 @@ package com.work_out_record
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.*
@@ -11,13 +10,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
+import kotlin.collections.ArrayList
 
 class WorkoutListFragment: Fragment() {
 
@@ -28,7 +26,7 @@ class WorkoutListFragment: Fragment() {
     interface Callbacks {
         fun onRecordSelected(recordId: UUID)
         fun onDeleteSelected()
-        fun onCalendarSelected()
+        fun onCalendarSelected(dates: ArrayList<Date>)
     }
     private var callbacks: Callbacks? = null
 
@@ -43,6 +41,9 @@ class WorkoutListFragment: Fragment() {
 
     //레이아웃 아이템 선언
     private lateinit var noRecordSearchTextView: TextView
+
+    private val dates = ArrayList<Date>()
+
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
     private lateinit var savedRoutineName: Array<String>
@@ -150,6 +151,9 @@ class WorkoutListFragment: Fragment() {
             { records ->
                 records?.let {
                     updateUI(records, 0)
+                    for (i in records.indices) {
+                        dates.add(records[i].date!!)
+                    }
                 }
             }
         )
@@ -208,7 +212,7 @@ class WorkoutListFragment: Fragment() {
                 true
             }
             R.id.view_calender -> {
-                callbacks?.onCalendarSelected()
+                callbacks?.onCalendarSelected(dates)
                 true
             }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
+import kotlin.collections.ArrayList
 
 class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,14 +39,14 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .commit()
     }
 
-//    override fun onCalendarSelected(dateList: MutableList<Date>) {
-//        val fragment = WorkoutCalendarFragment.newInstance()
-//        supportFragmentManager
-//            .beginTransaction()
-//            .replace(R.id.fragment_container, fragment)
-//            .addToBackStack(null)
-//            .commit()
-//    }
+    override fun onCalendarSelected(dates: ArrayList<Date>) {
+        val fragment = WorkoutCalendarFragment.newInstance(dates)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     fun setActionBarTitle(title: Int) {
         val actionBar: ActionBar? = supportActionBar
