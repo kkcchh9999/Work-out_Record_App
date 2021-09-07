@@ -26,7 +26,7 @@ class WorkoutListFragment: Fragment() {
     interface Callbacks {
         fun onRecordSelected(recordId: UUID)
         fun onDeleteSelected()
-        fun onCalendarSelected(records: ArrayList<Record>)
+        fun onCalendarSelected()
     }
     private var callbacks: Callbacks? = null
 
@@ -212,7 +212,7 @@ class WorkoutListFragment: Fragment() {
                 true
             }
             R.id.view_calender -> {
-                callbacks?.onCalendarSelected(records)
+                callbacks?.onCalendarSelected()
                 true
             }
 

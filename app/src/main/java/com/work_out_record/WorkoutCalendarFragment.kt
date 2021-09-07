@@ -24,18 +24,8 @@ class WorkoutCalendarFragment : Fragment() {
     private lateinit var calendarView:  MaterialCalendarView
     private lateinit var countRecords: TextView
     private lateinit var workoutRoutine: TextView
-    private var records = ArrayList<Record>()
 
     private var calendarDays: MutableList<CalendarDay> = emptyList<CalendarDay>().toMutableList()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        //fragment 간 데이터 받아오기
-        records = arguments?.get(CALENDAR_VIEW) as ArrayList<Record>
-        //중복 제거
-        records = records.distinct() as ArrayList<Record>
-    }
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -49,17 +39,11 @@ class WorkoutCalendarFragment : Fragment() {
         countRecords = view.findViewById(R.id.count_records)
         workoutRoutine = view.findViewById(R.id.routine_textview)
 
-        countRecords.text = "${records.size} 개"
-
-        for (i in 0 until records.size) {
-            calendarDays.add(CalendarDay(records[i].date))
-        }
-
         calendarView.addDecorators(
-            TodayDecorator(this.context),
+            NormalDayDecorator(),
+            TodayDecorator(),
             SundayDecorator(),
             SaturdayDecorator(),
-            NormalDayDecorator(),
             CheckedDecorator(this.context, calendarDays)
         )
 
@@ -74,12 +58,8 @@ class WorkoutCalendarFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
     //오늘 날짜에 흰색 체크
-    class TodayDecorator(context: Context?) : DayViewDecorator {
+    class TodayDecorator() : DayViewDecorator {
         private var date = CalendarDay.today()
 
         override fun shouldDecorate(day: CalendarDay?): Boolean {
@@ -87,7 +67,7 @@ class WorkoutCalendarFragment : Fragment() {
         }
 
         override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 14, 190, 14)){})
+            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 14, 220, 14)){})
         }
     }
 
@@ -101,7 +81,7 @@ class WorkoutCalendarFragment : Fragment() {
         }
 
         override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 190, 14, 14)){})
+            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 220, 14, 14)){})
         }
     }
 
@@ -115,7 +95,7 @@ class WorkoutCalendarFragment : Fragment() {
         }
 
         override fun decorate(view: DayViewFacade?) {
-            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 14, 14, 190)){})
+            view?.addSpan(object : ForegroundColorSpan(Color.argb(100, 14, 14, 220)){})
         }
     }
 
@@ -147,14 +127,6 @@ class WorkoutCalendarFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(records: ArrayList<Record>): WorkoutCalendarFragment {
-            val args = Bundle().apply{
-                putSerializable(CALENDAR_VIEW, records)
-            }
-
-            return WorkoutCalendarFragment().apply {
-                arguments = args
-            }
-        }
+        fun newInstance() = WorkoutCalendarFragment()
     }
 }

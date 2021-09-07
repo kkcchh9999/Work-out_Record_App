@@ -39,8 +39,8 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .commit()
     }
 
-    override fun onCalendarSelected(records: ArrayList<Record>) {
-        val fragment = WorkoutCalendarFragment.newInstance(records)
+    override fun onCalendarSelected() {
+        val fragment = WorkoutCalendarFragment.newInstance()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
