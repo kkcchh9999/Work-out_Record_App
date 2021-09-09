@@ -1,5 +1,6 @@
 package com.work_out_record
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 
 class RecordsViewModel : ViewModel() {
@@ -22,5 +23,21 @@ class RecordsViewModel : ViewModel() {
 
     fun deleteRecord(record: Record) {  //Record 삭제 함수
         recordRepository.deleteRecord(record)
+    }
+
+    companion object {
+
+        private var INSTANCE: RecordsViewModel? = null
+
+        fun init() {
+            if (INSTANCE == null) {
+                INSTANCE = RecordsViewModel()
+            }
+        }
+
+        fun get(): RecordsViewModel {
+            return INSTANCE?:
+            throw IllegalAccessException("Must be initalized")
+        }
     }
 }

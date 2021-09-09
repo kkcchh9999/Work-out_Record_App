@@ -35,9 +35,7 @@ class WorkoutListFragment: Fragment() {
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
     //뷰모델 선언
     private val recordAndRoutineViewModel = RecordAndRoutineViewModel.get()
-    private val recordViewModel: RecordsViewModel by lazy {
-        ViewModelProvider(this).get(RecordsViewModel::class.java)
-    }
+    private val recordViewModel = RecordsViewModel.get()
 
     //레이아웃 아이템 선언
     private lateinit var noRecordSearchTextView: TextView
@@ -146,6 +144,7 @@ class WorkoutListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recordViewModel.rollbackRecord()
         recordViewModel.recordLiveData.observe(
             viewLifecycleOwner,
             { records ->
@@ -215,7 +214,6 @@ class WorkoutListFragment: Fragment() {
                 callbacks?.onCalendarSelected()
                 true
             }
-
             else -> return super.onOptionsItemSelected(item)
         }
     }

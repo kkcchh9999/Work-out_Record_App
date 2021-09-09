@@ -22,9 +22,7 @@ class WorkoutListDeleteFragment: Fragment() {
     private lateinit var recordRecyclerView: RecyclerView
     private var adapter: RecordAdapter? = RecordAdapter(emptyList())
     //뷰모델 선언
-    private val recordViewModel: RecordsViewModel by lazy {
-        ViewModelProvider(this).get(RecordsViewModel::class.java)
-    }
+    private val recordViewModel = RecordsViewModel.get()
 
     //레코드 삭제를 위한 리스트 선언
     private lateinit var deleteAll: List<Record>

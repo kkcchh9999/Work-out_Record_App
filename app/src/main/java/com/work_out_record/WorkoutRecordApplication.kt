@@ -8,5 +8,6 @@ class WorkoutRecordApplication : Application() {    //앱의 서브클래스
         super.onCreate()
         RecordRepository.init(this)
         RecordAndRoutineViewModel.init(this)
+        RecordsViewModel.init()
     }
 }
