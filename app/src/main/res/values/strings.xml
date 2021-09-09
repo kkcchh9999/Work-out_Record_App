@@ -9,7 +9,8 @@
     12, 12, 12, 11 -> X\n
     12, 11, 11, 10 -> X</string>
     <string name="workout_part">운동 부위 : </string>
-    <string name="record_count">총 운동일지 수 : </string>
+    <string name="workout_part_calendar">%1$s의 운동 부위 : </string>
+    <string name="record_count">지금까지 총 %1$d 번의 일지를 작성했습니다.\n앞으로도 열심히 힘내봅시다! </string>
     <string name="no_record">새 일지를 작성해 보세요</string>
     <string name="no_record_search">검색 결과가 없습니다.\n다시 정확히 검색해주세요.</string>
     <string name="empty_record_alert">일지의 내용이 없어서\n저장되지 않았습니다.</string>
