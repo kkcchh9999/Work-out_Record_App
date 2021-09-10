@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 import kotlin.collections.ArrayList
 
+//앱의 메인 액티비티
 class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout_record)
-
+        //최초 프래그먼트 설정
         val isFragmentContainerEmpty = savedInstanceState == null
         if (isFragmentContainerEmpty) {
             supportFragmentManager
@@ -18,9 +20,9 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
                 .add(R.id.fragment_container, WorkoutListFragment.newInstance())
                 .commit()
         }
-        val actionBar: ActionBar? = supportActionBar
     }
 
+    //레코드가 선택되었을 때 화면전환
     override fun onRecordSelected(recordId: UUID) {
         val fragment = WorkoutDetailFragment.newInstance(recordId)
         supportFragmentManager
@@ -30,6 +32,7 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .commit()
     }
 
+    //삭제가 선택되었을 때 화면전환
     override fun onDeleteSelected() {
         val fragment = WorkoutListDeleteFragment.newInstance()
         supportFragmentManager
@@ -39,6 +42,7 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .commit()
     }
 
+    //캘린더가 선택되었을 때 화면전환
     override fun onCalendarSelected() {
         val fragment = WorkoutCalendarFragment.newInstance()
         supportFragmentManager
@@ -48,6 +52,7 @@ class WorkoutRecordActivity : AppCompatActivity(), WorkoutListFragment.Callbacks
             .commit()
     }
 
+    //액션바 이름 설정
     fun setActionBarTitle(title: Int) {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.setTitle(title)

@@ -39,15 +39,13 @@ class WorkoutListFragment: Fragment() {
 
     //레이아웃 아이템 선언
     private lateinit var noRecordSearchTextView: TextView
-
-    private val records = ArrayList<Record>()
-
     private lateinit var noRecordTextView: TextView
     private lateinit var noRecordButton: ImageButton
     private lateinit var savedRoutineName: Array<String>
     private lateinit var floatingButton: FloatingActionButton
     private val routineCode: Array<String> = arrayOf("루틴0", "루틴1", "루틴2", "루틴3", "루틴4")
 
+    //앱이 실행되면 callbacks 객체 선언
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callbacks = context as Callbacks?
@@ -55,7 +53,7 @@ class WorkoutListFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(true) //메뉴 설정
     }
 
     override fun onCreateView(
@@ -65,6 +63,7 @@ class WorkoutListFragment: Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_workout_list, container, false)
 
+        //레이아웃 객체 연결
         recordRecyclerView = view.findViewById(R.id.record_recyclerview)
         recordRecyclerView.layoutManager = GridLayoutManager(context, 2)
         recordRecyclerView.adapter = adapter
@@ -74,6 +73,7 @@ class WorkoutListFragment: Fragment() {
         floatingButton = view.findViewById(R.id.floating_button)
         floatingButton.visibility = View.VISIBLE
 
+        //fab 메모추가기능
         floatingButton.setOnClickListener {
             var selectedItem: Int = -1
             val builder = AlertDialog.Builder(this.context, R.style.AlertDialogTheme)
@@ -128,12 +128,12 @@ class WorkoutListFragment: Fragment() {
             alertDialog.show()
             alertDialog.window?.setBackgroundDrawableResource(R.drawable.alert_dialog_background)
         }
-
         savedRoutineName = recordAndRoutineViewModel.savedRoutineName
 
         return view
     }
 
+    //프래그먼트가 켜졌을 때 앱바 이름 설정
     override fun onResume() {
         super.onResume()
         activity
@@ -142,6 +142,7 @@ class WorkoutListFragment: Fragment() {
         }
     }
 
+    //UI 업데이트, 데이터베이스의 값 읽어와서 보여주기
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recordViewModel.rollbackRecord()
@@ -150,19 +151,18 @@ class WorkoutListFragment: Fragment() {
             { records ->
                 records?.let {
                     updateUI(records, 0)
-                    for (i in records.indices) {
-                        this.records.add(records[i])
-                    }
                 }
             }
         )
     }
 
+    //종료시에 callbacks 객체 삭제
     override fun onDetach() {
         super.onDetach()
         callbacks = null
     }
 
+    //옵션 메뉴
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_workout_list, menu)
@@ -170,9 +170,10 @@ class WorkoutListFragment: Fragment() {
         val searchRecord: MenuItem = menu.findItem(R.id.search_record)
         val searchView = searchRecord.actionView as SearchView
 
+        //SearchView, 검색기능
         searchView.apply {
-            setOnCloseListener {
-                recordViewModel.rollbackRecord()
+            setOnCloseListener {    //검색 취소시
+               recordViewModel.rollbackRecord()
                 recordViewModel.recordLiveData.observe(
                     viewLifecycleOwner,
                     { records ->
@@ -184,10 +185,11 @@ class WorkoutListFragment: Fragment() {
                 false
             }
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                //확인 버튼을 눌렀을 때
                 override fun onQueryTextSubmit(query: String?): Boolean {
                    return true
                 }
-
+                //글자가 바뀌었을 때
                 override fun onQueryTextChange(newText: String?): Boolean {
                     recordViewModel.searchRecord(newText!!)
                     recordViewModel.recordLiveData.observe(
@@ -203,13 +205,15 @@ class WorkoutListFragment: Fragment() {
             })
         }
     }
-
+    //옵션이 선택되었을 때
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            //삭제 옵션 -> 프래그먼트 이동
             R.id.delete_records -> {
                 callbacks?.onDeleteSelected()
                 true
             }
+            //캘린더 옵션 -> 프래그먼트 이동
             R.id.view_calender -> {
                 callbacks?.onCalendarSelected()
                 true
@@ -217,10 +221,12 @@ class WorkoutListFragment: Fragment() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
-
+    //UI 업데이트 함수
     private fun updateUI(records: List<Record>, mod: Int) {
         adapter = RecordAdapter(records)
+        //입력받은 list 로 리사이클러 어댑터에 정보 전달
         recordRecyclerView.adapter = adapter
+        //mod 값으로 검색했을 때 레코드가 없는것과 아무 데이터 없는 것의 구분
         if (records.isEmpty() && mod == 0) {
             noRecordSearchTextView.visibility = View.INVISIBLE
             noRecordTextView.visibility = View.VISIBLE
@@ -243,6 +249,7 @@ class WorkoutListFragment: Fragment() {
         }
     }
 
+    //리사이클러뷰의 홀더
     private inner class RecordHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener, View.OnLongClickListener {
 
         private lateinit var record: Record
@@ -255,13 +262,14 @@ class WorkoutListFragment: Fragment() {
             itemView.setOnClickListener(this)
             itemView.setOnLongClickListener(this)
         }
+        //데이터 값 바인딩 함수
         fun bind(record: Record) {
             this.record = record
             dateTextView.text = DateFormat.format("yyyy-MM-dd EEE HH:mm", record.date).toString()
             partTextView.text = record.part
             routineTextView.text = record.routine
         }
-
+        //클릭 리스너
         override fun onClick(v: View?) {
             callbacks?.onRecordSelected(record.id)
         }
@@ -273,6 +281,7 @@ class WorkoutListFragment: Fragment() {
         }
     }
 
+    //리사이클러 뷰 어댑터
     private inner class RecordAdapter(var records: List<Record>) : RecyclerView.Adapter<RecordHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
@@ -281,6 +290,7 @@ class WorkoutListFragment: Fragment() {
         }
 
         override fun onBindViewHolder(holder: RecordHolder, position: Int) {
+            //데이터 값 바인딩
             val record = records[position]
             holder.bind(record)
         }
